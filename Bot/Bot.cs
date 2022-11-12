@@ -19,7 +19,7 @@ namespace Woody.Bot
         public DiscordClient Client { get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
         public CommandsNextExtension Сommands { get; private set; }
-        internal static EventId TestBotEventId { get; } = new EventId(1000, "TestBot");
+        internal static EventId WoodyBotEventId { get; } = new EventId(1000, "Woody");
         #endregion
 
         public async Task WoodyCord()
@@ -46,7 +46,6 @@ namespace Woody.Bot
             Client = new DiscordClient(config);
 
             Client.Ready += ClientReady;
-            Client.GuildStickersUpdated += ClientStickersUpdate;
             Client.GuildAvailable += ClientGuildAvailable;
 
             var slash = Client.UseSlashCommands();
@@ -58,14 +57,10 @@ namespace Woody.Bot
         }
 
         private Task ClientReady(DiscordClient client, ReadyEventArgs e) => Task.CompletedTask;
-        private Task ClientStickersUpdate (DiscordClient sender, GuildStickersUpdateEventArgs e)
-        {
-            Client.Logger.LogInformation("{GuildId} стикеры обновлены: {StickerBeforeCount} -> {StickerAfterCount}", e.Guild.Id, e.StickersBefore.Count, e.StickersAfter.Count);
-            return Task.CompletedTask;
-        }
+
         private Task ClientGuildAvailable(DiscordClient client, GuildCreateEventArgs e)
         {
-            client.Logger.LogInformation(TestBotEventId, "Сервер доступен: '{GuildId}'", e.Guild.Name);
+            client.Logger.LogInformation(WoodyBotEventId, "Сервер доступен: '{GuildId}'", e.Guild.Name);
             return Task.CompletedTask;
         }
     }

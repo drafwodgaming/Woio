@@ -1,5 +1,8 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
+using Newtonsoft.Json;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Woody.Commands
@@ -8,14 +11,12 @@ namespace Woody.Commands
     public class AboutCommands : ApplicationCommandModule
     {
         #region /about server
-        [SlashCommand("server", "Информация о сервере.")]
+        [SlashCommand("server", "Посмотреть информацию о сервере.")]
         public static async Task Server(InteractionContext commandContext)
         {
-            DiscordColor BlackTrancparent = new(47, 49, 54);
-
             var embed = new DiscordEmbedBuilder
             {
-                Color = BlackTrancparent,
+                Color = DiscordColors.BlackTrancparent,
                 Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = commandContext.Guild.IconUrl },
                 Title = $"**О сервере [ {commandContext.Guild.Name} ]**",
                 Description =
@@ -28,5 +29,19 @@ namespace Woody.Commands
             await commandContext.CreateResponseAsync(embed).ConfigureAwait(false);
         }
         #endregion
+
+        #region /about user
+        [SlashCommand("user", "Посмотреть информацию о пользователе.")]
+        public static async Task User(InteractionContext commandContext)
+        {
+            var embed = new DiscordEmbedBuilder
+            {
+                Color = DiscordColors.BlackTrancparent,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail {Url = commandContext.User.AvatarUrl},
+                Title = $"О пользователе [ {commandContext.User.Username} ]",
+            };
+            await commandContext.CreateResponseAsync(embed).ConfigureAwait(false);
+        #endregion
+        }
     }
 }
