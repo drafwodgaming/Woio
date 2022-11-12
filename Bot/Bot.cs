@@ -20,7 +20,6 @@ namespace Woody.Bot
 
         public async Task WoodyCord()
         {
-
             #region Json
             var json = string.Empty;
             using (var fs = File.OpenRead("Config.json/BotConfig.json"))
