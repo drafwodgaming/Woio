@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BungieSharper" Version="0.9.3" />
+    <PackageReference Include="BungieSharper.Entities" Version="0.9.3" />
+    <PackageReference Include="DSharpPlus" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.Lavalink" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.Rest" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.SlashCommands" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="BotToken.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+    <Folder Include="Slash\" />
+  </ItemGroup>
+
+</Project>
