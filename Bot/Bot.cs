@@ -23,7 +23,7 @@ namespace Woody.Bot
 
             #region Json
             var json = string.Empty;
-            using (var fs = File.OpenRead("BotToken.json"))
+            using (var fs = File.OpenRead("Config.json/BotConfig.json"))
             using (var streamReader = new StreamReader(fs, new UTF8Encoding(false)))
                 json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);

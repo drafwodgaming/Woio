@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Slash\**" />
+    <EmbeddedResource Remove="Slash\**" />
+    <None Remove="Slash\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BungieSharper" Version="0.9.3" />
     <PackageReference Include="BungieSharper.Entities" Version="0.9.3" />
     <PackageReference Include="DSharpPlus" Version="4.2.0" />
@@ -26,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
-    <Folder Include="Slash\" />
   </ItemGroup>
 
 </Project>
