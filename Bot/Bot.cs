@@ -26,7 +26,7 @@ namespace Woody.Bot
         {
             #region Json
             var json = string.Empty;
-            using (var fs = File.OpenRead("Config.json/BotConfig.json"))
+            using (var fs = File.OpenRead("ConfigJson/BotConfig.json"))
             using (var streamReader = new StreamReader(fs, new UTF8Encoding(false)))
                 json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
@@ -49,7 +49,8 @@ namespace Woody.Bot
             Client.GuildAvailable += ClientGuildAvailable;
             Client.SocketErrored += ClientSocketError;
             Client.GuildCreated += ClienGuildCreate;
-            Client.VoiceStateUpdated += ClienVoiceStateUpdate;
+            Client.GuildUpdated += ClienGuildUpdate;
+            Client.ChannelCreated += ClienChannelCreate;
             #endregion
 
             var slash = Client.UseSlashCommands();
@@ -72,15 +73,18 @@ namespace Woody.Bot
             client.Logger.LogError(WoodyBotEventId, ex, "Websocket ошибка");
             return Task.CompletedTask;
         }
-        private Task ClienVoiceStateUpdate(DiscordClient sender, VoiceStateUpdateEventArgs e)
+        private Task ClienGuildCreate(DiscordClient client, GuildCreateEventArgs e)
+        {
+            client.Logger.LogInformation(WoodyBotEventId, "Сервер создан '{GuildId}'", e.Guild.Name);
+            return Task.CompletedTask;
+        }
+        private Task ClienGuildUpdate(DiscordClient sender, GuildUpdateEventArgs e)
         {
             throw new NotImplementedException();
         }
-
-        private Task ClienGuildCreate(DiscordClient sender, GuildCreateEventArgs e)
+        private Task ClienChannelCreate(DiscordClient sender, ChannelCreateEventArgs e)
         {
             throw new NotImplementedException();
         }
-
     }
 }
