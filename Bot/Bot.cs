@@ -14,6 +14,7 @@ using System;
 using DSharpPlus.Entities;
 using System.Linq;
 using DSharpPlus.SlashCommands.EventArgs;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Woody.Bot
 {
@@ -23,16 +24,17 @@ namespace Woody.Bot
         internal static EventId WoodyBotEventId { get; } = new EventId(1000, "Woio");
         public DiscordClient Client { get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
-        public SlashCommandsExtension SlashCommandService {get; private set; }
+        public SlashCommandsExtension SlashCommandService { get; private set; }
         #endregion
 
-        public async Task WoodyCord()
+        public Bot(IServiceProvider serviceProvider)
         {
             #region Json
             var json = string.Empty;
             using (var fs = File.OpenRead("ConfigJson/BotConfig.json"))
             using (var streamReader = new StreamReader(fs, new UTF8Encoding(false)))
-                json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
+                json = streamReader.ReadToEnd();
+
             var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
             #endregion
 
@@ -54,8 +56,8 @@ namespace Woody.Bot
             Client.SocketErrored += ClientSocketError;
             Client.GuildCreated += ClienGuildCreate;
             Client.GuildUpdated += ClienGuildUpdate;
-            Client.ChannelCreated   += ClienChannelCreate;
-            Client.ChannelDeleted  += ClientChannelDelete;
+            Client.ChannelCreated += ClienChannelCreate;
+            Client.ChannelDeleted += ClientChannelDelete;
             Client.ChannelUpdated += ClienChannelUpdate;
             #endregion
 
@@ -66,9 +68,9 @@ namespace Woody.Bot
 
             SlashCommandService.RegisterCommands<AboutCommands>(guildId: 890594642796609576);
 
-            await Client.ConnectAsync();
+            Client.ConnectAsync();
 
-            await Task.Delay(-1);
+            Task.Delay(-1);
         }
 
         #region Logs

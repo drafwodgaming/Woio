@@ -22,10 +22,8 @@ namespace Woody.Commands
                 Description =
                 $"**Название:** {commandContext.Guild.Name}\n" +
                 $"**Создатель:** <@{commandContext.Guild.Owner.Id}>\n" +
-                $"**Количество участников:** {commandContext.Guild.MemberCount}\n" +
                 $"**Создан:** <t:1632407323:R>\n"
             };
-
             await commandContext.CreateResponseAsync(embed).ConfigureAwait(false);
         }
         #endregion

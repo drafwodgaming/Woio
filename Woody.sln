@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Woody", "Woody.csproj", "{448795AC-19C2-4E38-8D3B-7F178F95D277}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Woody", "Woody.csproj", "{448795AC-19C2-4E38-8D3B-7F178F95D277}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Woio.DAL", "Woio.DAL", "{28FE5505-1C23-429C-8C97-724076F5AA53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Woio", "..\Woio.DAL\Woio.csproj", "{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{448795AC-19C2-4E38-8D3B-7F178F95D277}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{448795AC-19C2-4E38-8D3B-7F178F95D277}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{448795AC-19C2-4E38-8D3B-7F178F95D277}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7} = {28FE5505-1C23-429C-8C97-724076F5AA53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D97A666-77BA-432B-BA5F-D8C879068F09}
