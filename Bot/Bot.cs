@@ -36,7 +36,6 @@ namespace Woody.Bot
             {
                 AutoReconnect = true,
                 LargeThreshold = 250,
-                MinimumLogLevel = LogLevel.Trace,
                 Token = configJson.Token,
                 TokenType = TokenType.Bot,
                 MessageCacheSize = 2048,
@@ -45,8 +44,13 @@ namespace Woody.Bot
 
             Client = new DiscordClient(config);
 
+            #region Events
             Client.Ready += ClientReady;
             Client.GuildAvailable += ClientGuildAvailable;
+            Client.SocketErrored += ClientSocketError;
+            Client.GuildCreated += ClienGuildCreate;
+            Client.VoiceStateUpdated += ClienVoiceStateUpdate;
+            #endregion
 
             var slash = Client.UseSlashCommands();
             slash.RegisterCommands<AboutCommands>(guildId: 890594642796609576);
@@ -55,13 +59,18 @@ namespace Woody.Bot
 
             await Task.Delay(-1);
         }
-
-        private Task ClientReady(DiscordClient client, ReadyEventArgs e) => Task.CompletedTask;
-
+        private Task ClientReady(DiscordClient sender, ReadyEventArgs e) => Task.CompletedTask;
         private Task ClientGuildAvailable(DiscordClient client, GuildCreateEventArgs e)
         {
             client.Logger.LogInformation(WoodyBotEventId, "Сервер доступен: '{GuildId}'", e.Guild.Name);
             return Task.CompletedTask;
         }
+        private Task ClientSocketError(DiscordClient client, SocketErrorEventArgs e)
+        {
+            var ex = e.Exception is AggregateException ae ? ae.InnerException : e.Exception;
+            client.Logger.LogError(WoodyBotEventId, ex, "Websocket ошибка");
+            return Task.CompletedTask;
+        }
+
     }
 }
