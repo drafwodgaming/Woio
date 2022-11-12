@@ -1,4 +1,5 @@
-﻿using DSharpPlus;
+﻿#pragma warning disable CS0618
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.SlashCommands;
@@ -12,16 +13,17 @@ using DSharpPlus.EventArgs;
 using System;
 using DSharpPlus.Entities;
 using System.Linq;
+using DSharpPlus.SlashCommands.EventArgs;
 
 namespace Woody.Bot
 {
     public class Bot
     {
         #region Variables
+        internal static EventId WoodyBotEventId { get; } = new EventId(1000, "Woio");
         public DiscordClient Client { get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
-        public CommandsNextExtension Сommands { get; private set; }
-        internal static EventId WoodyBotEventId { get; } = new EventId(1000, "Woody");
+        public SlashCommandsExtension SlashCommandService {get; private set; }
         #endregion
 
         public async Task WoodyCord()
@@ -57,14 +59,20 @@ namespace Woody.Bot
             Client.ChannelUpdated += ClienChannelUpdate;
             #endregion
 
-            var slash = Client.UseSlashCommands();
-            slash.RegisterCommands<AboutCommands>(guildId: 890594642796609576);
+            SlashCommandService = Client.UseSlashCommands();
+            SlashCommandService.SlashCommandErrored += SlashCommandErrored;
+            SlashCommandService.SlashCommandInvoked += SlashCommandReceived;
+            SlashCommandService.SlashCommandExecuted += SlashCommandExecuted;
+
+            SlashCommandService.RegisterCommands<AboutCommands>(guildId: 890594642796609576);
+            SlashCommandService.RegisterCommands<OtherCommands>(guildId: 890594642796609576);
 
             await Client.ConnectAsync();
 
             await Task.Delay(-1);
         }
 
+        #region Logs
         private Task ClientReady(DiscordClient sender, ReadyEventArgs e) => Task.CompletedTask;
         private Task ClientGuildAvailable(DiscordClient client, GuildCreateEventArgs e)
         {
@@ -117,12 +125,12 @@ namespace Woody.Bot
         }
         private async Task ClienChannelCreate(DiscordClient sender, ChannelCreateEventArgs e)
         {
-            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelDelete).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
+            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelCreate).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
             foreach (var entry in logs) Console.WriteLine("TargetId: " + entry.Target.Id);
         }
         private async Task ClientChannelDelete(DiscordClient sender, ChannelDeleteEventArgs e)
         {
-            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelCreate).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
+            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelDelete).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
             foreach (var entry in logs) Console.WriteLine("TargetId: " + entry.Target.Id);
         }
         private async Task ClienChannelUpdate(DiscordClient sender, ChannelUpdateEventArgs e)
@@ -130,5 +138,31 @@ namespace Woody.Bot
             var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelUpdate).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
             foreach (var entry in logs) Console.WriteLine("TargetId: " + entry.Target.Id);
         }
+
+        private async Task SlashCommandErrored(SlashCommandsExtension slashCommands, SlashCommandErrorEventArgs e)
+        {
+            e.Context.Client.Logger.LogError(WoodyBotEventId, e.Exception, "Произошло исключение {User} во время вызова `{Command}`", e.Context.User.Username, e.Context.CommandName);
+            var emoji = DiscordEmoji.FromName(e.Context.Client, ":no_entry");
+
+            var embed = new DiscordEmbedBuilder
+            {
+                Title = "Ошибка",
+                Description = $"{emoji} Ошибка!",
+                Color = new DiscordColor(0xFF0000)
+            };
+
+            await e.Context.CreateResponseAsync(embed);
+        }
+        private Task SlashCommandReceived(SlashCommandsExtension slashCommands, SlashCommandInvokedEventArgs e)
+        {
+            e.Context.Client.Logger.LogInformation(WoodyBotEventId, "Пользователь {User} пытается выполнить комманду `{Command}` в канале [ {Channel} ]", e.Context.User.Username, e.Context.CommandName, (e.Context.Channel.Name).ToUpper());
+            return Task.CompletedTask;
+        }
+        private Task SlashCommandExecuted(SlashCommandsExtension slashCommands, SlashCommandExecutedEventArgs e)
+        {
+            e.Context.Client.Logger.LogInformation(WoodyBotEventId, "Пользователь {User} выполнил `{Command}` в канала [ {Channel} ]", e.Context.User.Username, e.Context.CommandName, (e.Context.Channel.Name).ToUpper());
+            return Task.CompletedTask;
+        }
+        #endregion
     }
 }

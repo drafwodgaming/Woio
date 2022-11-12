@@ -2,7 +2,7 @@
 
 namespace Woody
 {
-       struct ConfigJson
+    public struct ConfigJson
     {
 
         public static string FilePath {get;} = @"Configs/BotConfigs.json";
