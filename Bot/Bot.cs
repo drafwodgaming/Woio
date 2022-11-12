@@ -65,7 +65,6 @@ namespace Woody.Bot
             SlashCommandService.SlashCommandExecuted += SlashCommandExecuted;
 
             SlashCommandService.RegisterCommands<AboutCommands>(guildId: 890594642796609576);
-            SlashCommandService.RegisterCommands<OtherCommands>(guildId: 890594642796609576);
 
             await Client.ConnectAsync();
 
