@@ -59,6 +59,7 @@ namespace Woody.Bot
 
             await Task.Delay(-1);
         }
+
         private Task ClientReady(DiscordClient sender, ReadyEventArgs e) => Task.CompletedTask;
         private Task ClientGuildAvailable(DiscordClient client, GuildCreateEventArgs e)
         {
@@ -70,6 +71,15 @@ namespace Woody.Bot
             var ex = e.Exception is AggregateException ae ? ae.InnerException : e.Exception;
             client.Logger.LogError(WoodyBotEventId, ex, "Websocket ошибка");
             return Task.CompletedTask;
+        }
+        private Task ClienVoiceStateUpdate(DiscordClient sender, VoiceStateUpdateEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task ClienGuildCreate(DiscordClient sender, GuildCreateEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
     }
