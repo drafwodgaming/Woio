@@ -10,6 +10,8 @@ using Woody.Commands;
 using Microsoft.Extensions.Logging;
 using DSharpPlus.EventArgs;
 using System;
+using DSharpPlus.Entities;
+using System.Linq;
 
 namespace Woody.Bot
 {
@@ -50,7 +52,9 @@ namespace Woody.Bot
             Client.SocketErrored += ClientSocketError;
             Client.GuildCreated += ClienGuildCreate;
             Client.GuildUpdated += ClienGuildUpdate;
-            Client.ChannelCreated += ClienChannelCreate;
+            Client.ChannelCreated   += ClienChannelCreate;
+            Client.ChannelDeleted  += ClientChannelDelete;
+            Client.ChannelUpdated += ClienChannelUpdate;
             #endregion
 
             var slash = Client.UseSlashCommands();
@@ -70,7 +74,7 @@ namespace Woody.Bot
         private Task ClientSocketError(DiscordClient client, SocketErrorEventArgs e)
         {
             var ex = e.Exception is AggregateException ae ? ae.InnerException : e.Exception;
-            client.Logger.LogError(WoodyBotEventId, ex, "Websocket ошибка");
+            client.Logger.LogError(WoodyBotEventId, ex, "Websocket ошибка.");
             return Task.CompletedTask;
         }
         private Task ClienGuildCreate(DiscordClient client, GuildCreateEventArgs e)
@@ -78,13 +82,53 @@ namespace Woody.Bot
             client.Logger.LogInformation(WoodyBotEventId, "Сервер создан '{GuildId}'", e.Guild.Name);
             return Task.CompletedTask;
         }
-        private Task ClienGuildUpdate(DiscordClient sender, GuildUpdateEventArgs e)
+        private Task ClienGuildUpdate(DiscordClient client, GuildUpdateEventArgs e)
         {
-            throw new NotImplementedException();
+            var str = new StringBuilder();
+
+            str.AppendLine($"Сервер {e.GuildBefore.Name} был обновлён.");
+
+            foreach (var properties in typeof(DiscordGuild).GetProperties())
+            {
+                try
+                {
+                    var before = properties.GetValue(e.GuildBefore);
+                    var after = properties.GetValue(e.GuildAfter);
+
+                    if (before is null) client.Logger.LogDebug(WoodyBotEventId, "Сервер обновлён: свойство {Property} было нулевым", properties.Name);
+                    if (after is null) client.Logger.LogDebug(WoodyBotEventId, "Сервер обновлён; свойство {Property} было нулевым",properties.Name); 
+
+                    if (before is null || after is null) continue;
+                    if (before.ToString() == after.ToString()) continue;
+
+                    str.AppendLine($" - {properties.Name}: `{before}` to `{after}`");
+                }
+                catch (Exception ex)
+                {
+                    client.Logger.LogError(WoodyBotEventId, ex, "Ошибка при обновлении сервера");
+                }
+            }
+
+            str.AppendLine($" - VoiceRegion: `{e.GuildBefore.VoiceRegion?.Name}` to `{e.GuildAfter.VoiceRegion?.Name}`");
+
+            Console.WriteLine(str);
+
+            return Task.CompletedTask;
         }
-        private Task ClienChannelCreate(DiscordClient sender, ChannelCreateEventArgs e)
+        private async Task ClienChannelCreate(DiscordClient sender, ChannelCreateEventArgs e)
         {
-            throw new NotImplementedException();
+            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelDelete).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
+            foreach (var entry in logs) Console.WriteLine("TargetId: " + entry.Target.Id);
+        }
+        private async Task ClientChannelDelete(DiscordClient sender, ChannelDeleteEventArgs e)
+        {
+            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelCreate).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
+            foreach (var entry in logs) Console.WriteLine("TargetId: " + entry.Target.Id);
+        }
+        private async Task ClienChannelUpdate(DiscordClient sender, ChannelUpdateEventArgs e)
+        {
+            var logs = (await e.Guild.GetAuditLogsAsync(5, null, AuditLogActionType.ChannelUpdate).ConfigureAwait(false)).Cast<DiscordAuditLogChannelEntry>();
+            foreach (var entry in logs) Console.WriteLine("TargetId: " + entry.Target.Id);
         }
     }
 }
