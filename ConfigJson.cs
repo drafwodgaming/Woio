@@ -4,6 +4,9 @@ namespace Woody
 {
        struct ConfigJson
     {
+
+        public static string FilePath {get;} = @"Configs/BotConfigs.json";
+
         [JsonProperty("token")]
         public string Token { get; private set; }
 
