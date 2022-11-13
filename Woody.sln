@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Woio.DAL", "Woio.DAL", "{28
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Woio", "..\Woio.DAL\Woio.csproj", "{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WoioBot", "WoioBot", "{C245D810-1BBE-4B2E-99A4-20427CC289E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{448795AC-19C2-4E38-8D3B-7F178F95D277} = {C245D810-1BBE-4B2E-99A4-20427CC289E9}
 		{D900E649-A8CE-485E-BDB5-DF0CF6D73DA7} = {28FE5505-1C23-429C-8C97-724076F5AA53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
