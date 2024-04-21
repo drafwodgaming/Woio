@@ -37,7 +37,6 @@ module.exports = {
 			},
 		];
 		console.table(clientStats);
-		// sendEmbed(client);
 		checkAllGuilds(client);
 		await registerFonts();
 	},
