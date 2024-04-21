@@ -1,0 +1,35 @@
+{
+	"modals": {
+		"bugReport": "bugReport",
+		"reportTitle": "reportTitle",
+		"reportDescription": "reportDescription",
+		"tempChannelName": "tempChannelName",
+		"tempChannelNameInput": "tempChannelNameInput",
+		"tempChannelLimit": "tempChannelLimit",
+		"tempChannelLimitInput": " tempChannelLimitInput",
+
+		"newActivity": "newActivity",
+		"activityTitle": "activityTitle",
+		"activityDescription": "activityDescription",
+		"activityPlayersCount": "activityPlayersCount",
+		"roleId": "roleId"
+	},
+
+	"menus": {
+		"settingTempChannel": "settingTempChannel",
+		"values": {
+			"tempChannelName": "tempName",
+			"tempChannelLimit": "limit",
+			"tempChannelLock": "lock",
+			"tempChannelUnlock": "unlock"
+		}
+	},
+
+	"buttons": {
+		"sendReport": "sendReport",
+		"rulesButton": "rulesButton",
+		"joinToActivityButton": "joinToActivityButton",
+		"leaveFromActivityButton": "leaveFromActivityButton",
+		"groupReadyButton": "groupReady"
+	}
+}

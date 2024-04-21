@@ -1,0 +1,250 @@
+{
+	"code": "en",
+	"commands": {
+		"options": {
+			"userOption": "user",
+			"channelOption": "channel",
+			"languageOption": "language",
+			"roleOption": "role",
+			"typeReportOption": "type",
+			"reportDescriptionOption": "description"
+		},
+		"subcommands": {
+			"setup": "setup",
+			"disable": "disable",
+			"setLanguage": "set",
+			"newActivity": "new",
+			"searchActivity": "search"
+		},
+		"activity": {
+			"name": "activity",
+			"description": "Managing activities",
+			"newActivity": {
+				"description": "Creating a new activity",
+				"selectPingRole": "Select role"
+			},
+			"searchActivity": {
+				"description": "Searching for existing activities on the server",
+				"nameLabel": "Name: {{name}}",
+				"descriptionLabel": "Description: {{description}}",
+				"playersCountLabel": "Players: {{{playersInfo}}}",
+				"title": "Activity Links",
+				"noActivities": "{{{warningEmoji}}} **No activities found**"
+			}
+		},
+		"help": {
+			"name": "help",
+			"title": "Commands menu",
+			"description": "Get the list of commands for the bot"
+		},
+		"language": {
+			"name": "language",
+			"description": "Set the language for the server",
+			"setLanguage": "Set the language for the server",
+			"chooseLanguage": "Choose the language",
+			"languageUpdated": "{{{flag}}} Language set to {{language}}"
+		},
+		"serverInfo": {
+			"name": "serverinfo",
+			"title": "About Server",
+			"description": "View information about the server",
+			"noDescription": "No Description",
+			"generalLabel": "General",
+			"ownerId": "Owner: <@{{ownerId}}>",
+			"createdAt": "Created at: {{{guildCreatedAt}}}",
+			"totalMembersCount": "Total Members [ {{totalMembersCount}} ]",
+			"guildMembersCount": "Users: {{guildMembersCount}}",
+			"guildBotsCount": "Bots: {{botMembersCount}}",
+			"totalChannelsCount": "Total Channels [ {{guildChannels}} ]",
+			"textChannelsCount": "{{{textChannelsIco}}} `{{textChannels}}`",
+			"voiceChannelsCount": "{{{voiceChannelsIco}}} `{{voiceChannels}}`",
+			"categoriesCount": "{{{categoriesIco}}} `{{guildCategories}}`",
+			"annnouncementChannelsCount": "{{{annnouncementChannelIco}}} `{{annnouncementChannel}}`",
+			"stageChannelsCount": "{{{stageChannelIco}}} `{{stageChannel}}`",
+			"forumCount": "{{{forumIco}}} `{{forum}}`",
+			"totalEmojisCount": "Total Emojis [ {{totalEmojisCount}} ]",
+			"animatedEmojisCount": "Animated: {{animatedEmojisCount}}",
+			"staticEmojisCount": "Static: {{staticEmojisCount}}",
+			"guildRolesCount": "Roles [ {{guildRolesCount}} ]"
+		},
+		"userInfo": {
+			"name": "userinfo",
+			"description": "View information about the user",
+			"userOption": "Users",
+			"title": "About the User",
+			"createdAt": "Joined Discord",
+			"createdTime": "{{{userCreatedAt}}}",
+			"statusLabel": "Status",
+			"userStatus": "{{statusList}}",
+			"joinedAt": "Joined Server",
+			"joinedTime": "{{{memberJoinedTime}}}",
+			"memberRoles": "Roles",
+			"emptyRolesList": "No roles",
+			"online": "{{onlineEmoji}} Online",
+			"idle": "{{idleEmoji}} Idle",
+			"offline": "{{offlineEmoji}} Offline",
+			"dnd": "{{dndEmoji}} Do not Disturb"
+		},
+		"welcomeChannel": {
+			"name": "welcomechannel",
+			"editedChannel": "Welcome channel changed to <#{{channelId}}>",
+			"installedChannel": "Welcome channel set to <#{{channelId}}>. To disable run /welcomechannel disable",
+			"noChannel": "{{{warningEmoji}}} **Welcome channel not set**",
+			"deletedChannel": "Welcome channel deleted",
+			"selectChannel": "Select channel for welcome message",
+			"setupChannel": "Setup channel for welcome message",
+			"disableChannel": "Disable channel for welcome message",
+			"channelOption": "Setup channel for welcome message"
+		},
+		"leaveChannel": {
+			"name": "leavechannel",
+			"editedChannel": "Leave channel changed to <#{{channelId}}>",
+			"installedChannel": "Leave channel set to <#{{channelId}}>. To disabled run /leavechannel disable",
+			"noChannel": "{{{warningEmoji}}} **Leave channel not set**",
+			"deletedChannel": "Leave channel deleted",
+			"selectChannel": "Select channel for leave message",
+			"setupChannel": "Setup channel for leave message",
+			"disableChannel": "Disable channel for leave message",
+			"channelOption": "Setup channel for leave message"
+		},
+		"joinToCreateChannel": {
+			"name": "jointocreate",
+			"editedChannel": "\"Join To Create\" channel changed to <#{{channelId}}>",
+			"installedChannel": "\"Join To Create\" channel set to <#{{channelId}}>. To disabled run /jointocreate disable",
+			"noChannel": "{{{warningEmoji}}} **\"Join To Create\" channel not set**",
+			"deletedChannel": "\"Join To Create\" channel deleted",
+			"selectChannel": "Select \"Join To Create\"",
+			"setupChannel": "Setup \"Join To Create\" channel",
+			"disableChannel": "Disable \"Join To Create\"",
+			"channelOption": "Setup \"Join To Create\" channel"
+		},
+		"report": {
+			"name": "report",
+			"description": "Write a message to the owner of the bot",
+			"typeDescription": "Select type",
+			"reportDescription": "Describe your bug/suggestion",
+			"bugTitle": "{{{bug}}} | Bug",
+			"suggestionTitle": "{{{suggestion}}} | Suggestion",
+			"otherTitle": "{{{other}}} | Other",
+			"reportBy": "Report by {{user}} (Server: {{guild}})",
+			"succesSendReport": "Репорт успешно отправлен",
+			"fields": {
+				"description": "Description"
+			},
+			"preview": "Report Preview:"
+		}
+	},
+	"components": {
+		"modals": {
+			"setNameTempChannel": {
+				"title": "Change Channel Name",
+				"label": "Enter the new channel name",
+				"successMessage": "Channel name updated successfully!",
+				"exampleName": "Example: Talking",
+				"renameCooldownMessage": "You can rename the name no more often than every 5 minutes"
+			},
+			"setLimitTempChannel": {
+				"title": "Change Channel User Limit",
+				"label": "Enter user limit",
+				"errorInvalidLimit": "Please enter a valid user limit between 1 and 99",
+				"successMessage": "User limit updated successfully!",
+				"unlimitedLimitExample": "Set to 0 for unlimited"
+			},
+			"newActivity": {
+				"title": "NEW ACTIVITY",
+				"activityTitleInput": {
+					"label": "Activity Name",
+					"placeholder": "Enter the activity title for forming a combat group"
+				},
+				"activityDescription": {
+					"label": "Reason for searching for a combat group",
+					"placeholder": "What is the reason for the search, for example, \"Playing in trails\""
+				},
+				"activityPlayersCount": {
+					"label": "Number of participants for search",
+					"placeholder": "From 1 to 9",
+					"invalidNumberMessage": "Please enter a valid number for the participant count field"
+				},
+				"activityPingRole": {
+					"label": "Role",
+					"roleNotFoundMessage": "{{{warningEmoji}}} Role not found on the server"
+				},
+				"activityInfo": {
+					"playersField": "Participants",
+					"creatorField": "Creator"
+				}
+			}
+		},
+		"menus": {
+			"tempChannel": {
+				"changeSettings": "Change channel settings",
+				"noCreate": "You cannot manage the channel!",
+				"name": {
+					"label": "Name",
+					"description": "Change the channel name"
+				},
+				"limit": {
+					"label": "Limit",
+					"description": "Change the channel limit"
+				},
+				"lockChannel": {
+					"label": "Lock",
+					"description": "Lock the channel",
+					"successLock": "Channel successfully locked"
+				},
+				"unlockChannel": {
+					"label": "Unlock",
+					"description": "Unlock the channel",
+					"successUnlock": "Channel successfully unlocked"
+				}
+			}
+		},
+		"buttons": {
+			"report": {
+				"sendReport": {
+					"name": "Send Report",
+					"successSent": "Report was sent"
+				}
+			},
+			"activity": {
+				"joinToActivity": {
+					"name": "Join",
+					"deletedActivity": "Unable to find the associated activity",
+					"alreadyInGroup": "You are already a participant in this activity",
+					"successJoinToActivity": "You have joined the activity",
+					"ownerCannotJoin": "The creator cannot join the activity",
+					"groupFull": "Group is full"
+				},
+				"leaveFromActivity": {
+					"name": "Leave",
+					"deletedActivity": "Unable to find the associated activity",
+					"noInGroup": "You are not a member of the group",
+					"successLeaveFromActivity": "You have left the activity",
+					"ownerCannotLeave": "The creator cannot leave the activity. First, it needs to be closed"
+				},
+				"groupReady": {
+					"name": "Group ready!",
+					"pingPlayers": "{{{acceptedPlayers}}} group is ready!",
+					"deleteAfterTime": "Deletion in <t:{{deletionTimestampInSeconds}}:R>",
+					"ownerOnly": "This action is available only to the activity owner"
+				}
+			}
+		}
+	},
+	"events": {
+		"developerOnly": "This command may only be used by the developer",
+		"joinToCreate": {
+			"channelName": "🔉| {{username}}'s channel",
+			"tempVoiceChannelTitle": "Temporary Voice Channel"
+		}
+	},
+	"other": {
+		"loading": "{{{loadingEmoji}}} | Loading"
+	},
+	"logs": {
+		"unhandledRejection": "UNHANDLED PROMISE REJECTION ❯",
+		"uncaughtException": "UNHANDLED_PROMISE EXCEPTION ❯",
+		"succesMongoDBTitle": "[DATABASE STATUS] ❯",
+		"dbConnected": "Connected"
+	}
+}

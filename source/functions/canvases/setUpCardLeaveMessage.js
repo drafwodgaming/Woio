@@ -1,0 +1,46 @@
+const { AttachmentBuilder } = require('discord.js');
+const { createCanvas, loadImage } = require('canvas');
+const { fonts, memberCard, colors } = require('@config/botConfig.json');
+const memberCardBackground = require('@config/memberBackground.json');
+
+async function cardLeaveMessage(member) {
+	const { user } = member;
+	const { username } = user;
+	const avatarURL = user.displayAvatarURL({ extension: 'jpg' });
+	const fontSize = 43;
+	const canvasColor = colors.canvasWhite;
+
+	const canvas = createCanvas(1024, 450);
+	const context = canvas.getContext('2d');
+	const background = await loadImage(memberCardBackground.leave);
+	context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+	const leaveMessage = `Goodbye ${username}!`;
+	const { width, height } = canvas;
+	const leaveMessageX = width / 2;
+	const leaveMessageY = height - 90;
+
+	context.textAlign = 'center';
+	context.fillStyle = canvasColor;
+	context.font = `${fontSize}px ${fonts.luckiestGuyRegular.family}`;
+	context.fillText(leaveMessage, leaveMessageX, leaveMessageY);
+
+	context.beginPath();
+	context.lineWidth = 10;
+	context.strokeStyle = colors.canvasWhite;
+	context.arc(width / 2, height - 270, 100, 0, Math.PI * 2, true);
+	context.stroke();
+	context.clip();
+
+	const avatarImage = await loadImage(avatarURL);
+	context.drawImage(avatarImage, width / 2 - 100, height - 370, 200, 200);
+
+	const leaveMessageAttachment = new AttachmentBuilder(
+		canvas.toBuffer('image/png'),
+		memberCard.leave
+	);
+
+	return leaveMessageAttachment;
+}
+
+module.exports = { cardLeaveMessage };
