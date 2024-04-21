@@ -19,4 +19,5 @@ jobs:
           key: ${{ secrets.WOIO_SSH }}
           script: |
             cd ~/home
-            git pull origin main --force
+            git pull origin main
+            docker-compose restart
