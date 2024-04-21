@@ -2,10 +2,10 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { buttons } = require('@config/componentsId.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 
-async function activityButtons(interaction, disableGroupReadyButton) {
-	const joinToActivityId = buttons.joinToActivityButton;
-	const leaveFromActivityId = buttons.leaveFromActivityButton;
-	const groupReadyId = buttons.groupReadyButton;
+const activityButtons = async (interaction, disableGroupReadyButton) => {
+	const joinToActivityId = buttons.joinToActivity;
+	const leaveFromActivityId = buttons.leaveFromActivity;
+	const groupReadyId = buttons.groupReadyToActivity;
 	const localizedText = await getLocalizedText(interaction);
 
 	return new ActionRowBuilder().addComponents(
@@ -21,10 +21,12 @@ async function activityButtons(interaction, disableGroupReadyButton) {
 			.setStyle(ButtonStyle.Danger),
 		new ButtonBuilder()
 			.setCustomId(groupReadyId)
-			.setLabel(localizedText.components.buttons.activity.groupReady.name)
+			.setLabel(
+				localizedText.components.buttons.activity.groupReadyToActivity.name
+			)
 			.setStyle(ButtonStyle.Primary)
 			.setDisabled(disableGroupReadyButton)
 	);
-}
+};
 
 module.exports = { activityButtons };

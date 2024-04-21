@@ -34,7 +34,8 @@ async function editActivityMessage(
 	if (addTimestamp) {
 		const deletionTimestampInSeconds = Math.floor(Date.now() / 1000) + 10;
 		descriptionWithTimestamp += ` (${mustache.render(
-			localizedText.components.buttons.activity.groupReady.deleteAfterTime,
+			localizedText.components.buttons.activity.groupReadyToActivity
+				.deleteAfterTime,
 			{ deletionTimestampInSeconds }
 		)})`;
 	}

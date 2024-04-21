@@ -5,7 +5,7 @@ const {
 } = require('@functions/utils/activity/editActivityMessage');
 module.exports = {
 	data: {
-		name: buttons.leaveFromActivityButton,
+		name: buttons.leaveFromActivity,
 	},
 	async execute(interaction) {
 		const { user, message } = interaction;

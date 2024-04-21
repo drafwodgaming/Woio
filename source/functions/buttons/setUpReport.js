@@ -1,15 +1,12 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { buttons } = require('@config/componentsId.json');
-const { getLocalizedText } = require('@functions/locale/getLocale');
-async function reportButtons(localizedText) {
-	const sendReportId = buttons.sendReport;
 
-	return new ActionRowBuilder().addComponents(
+const reportButtons = async localizedText =>
+	new ActionRowBuilder().addComponents(
 		new ButtonBuilder()
-			.setCustomId(sendReportId)
+			.setCustomId(buttons.sendReport)
 			.setLabel(localizedText.components.buttons.report.sendReport.name)
 			.setStyle(ButtonStyle.Success)
 	);
-}
 
 module.exports = { reportButtons };

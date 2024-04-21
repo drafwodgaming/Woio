@@ -3,7 +3,7 @@ const { createCanvas, loadImage } = require('canvas');
 const { fonts, memberCard, colors } = require('@config/botConfig.json');
 const memberCardBackground = require('@config/memberBackground.json');
 
-async function cardWelcomeMessage(member) {
+const cardWelcomeMessage = async member => {
 	const { user } = member;
 	const { username } = user;
 	const avatarURL = user.displayAvatarURL({ extension: 'jpg' });
@@ -40,6 +40,6 @@ async function cardWelcomeMessage(member) {
 		memberCard.welcome
 	);
 	return leaveMessageAttachment;
-}
+};
 
 module.exports = { cardWelcomeMessage };

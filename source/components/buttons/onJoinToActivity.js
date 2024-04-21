@@ -6,7 +6,7 @@ const {
 
 module.exports = {
 	data: {
-		name: buttons.joinToActivityButton,
+		name: buttons.joinToActivity,
 	},
 	async execute(interaction) {
 		const { user, message } = interaction;

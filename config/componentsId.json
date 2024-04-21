@@ -28,8 +28,8 @@
 	"buttons": {
 		"sendReport": "sendReport",
 		"rulesButton": "rulesButton",
-		"joinToActivityButton": "joinToActivityButton",
-		"leaveFromActivityButton": "leaveFromActivityButton",
-		"groupReadyButton": "groupReady"
+		"joinToActivity": "joinToActivity",
+		"leaveFromActivity": "leaveFromActivity",
+		"groupReadyToActivity": "groupReadyToActivity"
 	}
 }

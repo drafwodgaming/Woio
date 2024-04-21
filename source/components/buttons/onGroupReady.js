@@ -7,12 +7,13 @@ const {
 
 module.exports = {
 	data: {
-		name: buttons.groupReadyButton,
+		name: buttons.groupReadyToActivity,
 	},
 	async execute(interaction) {
 		const { user, message } = interaction;
 		const localizedText = await getLocalizedText(interaction);
-		const languageConfig = localizedText.components.buttons.activity.groupReady;
+		const languageConfig =
+			localizedText.components.buttons.activity.groupReadyToActivity;
 
 		const activitySchema = interaction.client.models.get('activity');
 		const activityRecord = await activitySchema.findOne({

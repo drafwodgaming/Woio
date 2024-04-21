@@ -247,7 +247,7 @@
 					"ownerCannotLeave": "The creator cannot leave the activity. First, it needs to be closed"
 				},
 
-				"groupReady": {
+				"groupReadyToActivity": {
 					"name": "Group ready!",
 					"pingPlayers": "{{{acceptedPlayers}}} group is ready!",
 					"deleteAfterTime": "Deletion in <t:{{deletionTimestampInSeconds}}:R>",

@@ -200,7 +200,7 @@
 					"successLeaveFromActivity": "Ви вийшли з активності",
 					"ownerCannotLeave": "Творець не може вийти з активності. Спочатку її потрібно закрити"
 				},
-				"groupReady": {
+				"groupReadyToActivity": {
 					"name": "Группа готова",
 					"pingPlayers": "Група {{{acceptedPlayers}}} готова!",
 					"deleteAfterTime": "Видалення <t:{{deletionTimestampInSeconds}}:R>",
