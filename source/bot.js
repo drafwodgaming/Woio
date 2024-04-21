@@ -6,7 +6,7 @@ const botConfig = require('@config/botConfig.json');
 const botIntents = require('@config/botIntents');
 const client = new Client({ intents: botIntents });
 const rest = new REST({ version: botConfig.restVersion }).setToken(
-	botConfig.tokenDev
+	botConfig.token
 );
 
 client.commands = new Collection();
@@ -32,9 +32,9 @@ async function setUpBot() {
 	client.componentsHandler();
 	client.languagesHandler();
 	client.modelsHandler();
-	client.login(botConfig.tokenDev);
+	client.login(botConfig.token);
 
-	await rest.put(Routes.applicationCommands(botConfig.clientIdDev), {
+	await rest.put(Routes.applicationCommands(botConfig.clientId), {
 		body: client.commandsArray,
 	});
 }
