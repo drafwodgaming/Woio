@@ -3,7 +3,7 @@ const {
 } = require('@functions/utils/ready/checkGuildForEmptyChannels');
 const schedule = require('node-schedule');
 
-async function checkAllGuilds(client) {
+const checkAllGuilds = async client => {
 	schedule.scheduleJob({ dayOfWeek: 0, hour: 18, minute: 0 }, async () => {
 		const guilds = await client.guilds.cache;
 
@@ -11,6 +11,6 @@ async function checkAllGuilds(client) {
 			await checkGuildForEmptyChannels(guild);
 		}
 	});
-}
+};
 
 module.exports = { checkAllGuilds };

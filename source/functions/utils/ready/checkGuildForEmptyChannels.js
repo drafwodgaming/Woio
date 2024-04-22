@@ -1,4 +1,4 @@
-async function checkGuildForEmptyChannels(guild) {
+const checkGuildForEmptyChannels = async guild => {
 	const temporaryChannelsSchema = guild.client.models.get('temporaryChannels');
 	const tempChannels = await temporaryChannelsSchema.find({
 		guildId: guild.id,
@@ -19,6 +19,6 @@ async function checkGuildForEmptyChannels(guild) {
 			console.log(`- Channel ID: ${tempChannel.channelId}`);
 		}
 	}
-}
+};
 
 module.exports = { checkGuildForEmptyChannels };

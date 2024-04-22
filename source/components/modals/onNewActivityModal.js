@@ -1,5 +1,7 @@
 const { modals } = require('@config/componentsId.json');
-const { activityButtons } = require('@functions/buttons/setUpActivityButtons');
+const {
+	createActivityButtons,
+} = require('@functions/buttons/createActivityButtons');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const {
 	generateActivityEmbed,
@@ -66,11 +68,11 @@ module.exports = {
 		const embed = generateActivityEmbed(
 			activityData.title,
 			activityData.description,
-			participantsFieldName,
+			creatorId,
 			[],
 			activityData.playersCount,
-			creatorId,
 			creatorIdFieldName,
+			participantsFieldName,
 			colorActivity,
 			creatorAvatar
 		);
@@ -78,7 +80,7 @@ module.exports = {
 		await interaction.reply({
 			content: pingRole,
 			embeds: [embed],
-			components: [await activityButtons(interaction, true)],
+			components: [await createActivityButtons(localizedText, true)],
 		});
 
 		await interaction.fetchReply().then(async reply => {

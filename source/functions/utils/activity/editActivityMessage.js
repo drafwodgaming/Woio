@@ -1,5 +1,7 @@
 const mustache = require('mustache');
-const { activityButtons } = require('@functions/buttons/setUpActivityButtons');
+const {
+	createActivityButtons,
+} = require('@functions/buttons/createActivityButtons');
 const {
 	getColorByPercentage,
 } = require('@functions/utils/activity/getColorByPercentage');
@@ -7,15 +9,18 @@ const {
 	generateActivityEmbed,
 } = require('@functions/embeds/generateActivityEmbed');
 
-async function editActivityMessage(
+const editActivityMessage = async (
 	interaction,
 	database,
 	localizedText,
 	addTimestamp
-) {
+) => {
 	const isGroupNowFull =
 		database.acceptedPlayers.length === database.maxPlayersCount;
-	const components = await activityButtons(interaction, !isGroupNowFull);
+	const components = await createActivityButtons(
+		localizedText,
+		!isGroupNowFull
+	);
 	const participantsFieldName =
 		localizedText.components.modals.newActivity.activityInfo.playersField;
 	const creatorIdFieldName =
@@ -43,11 +48,11 @@ async function editActivityMessage(
 	const embed = generateActivityEmbed(
 		database.name,
 		descriptionWithTimestamp,
-		participantsFieldName,
+		database.ownerId,
 		database.acceptedPlayers,
 		database.maxPlayersCount,
-		database.ownerId,
 		creatorIdFieldName,
+		participantsFieldName,
 		colorActivity,
 		creatorAvatar
 	);
@@ -56,6 +61,6 @@ async function editActivityMessage(
 		embeds: [embed],
 		components: [components],
 	});
-}
+};
 
 module.exports = { editActivityMessage };

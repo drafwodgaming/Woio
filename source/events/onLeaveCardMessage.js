@@ -1,7 +1,7 @@
 const { Events } = require('discord.js');
 const {
-	cardLeaveMessage,
-} = require('@functions/canvases/setUpCardLeaveMessage');
+	createLeaveCardMessage,
+} = require('@functions/canvases/createLeaveCardMessage');
 
 module.exports = {
 	name: Events.GuildMemberRemove,
@@ -22,7 +22,7 @@ module.exports = {
 
 		if (user.bot || !leaveChannel) return;
 
-		const leaveMessageCanvas = await cardLeaveMessage(member);
+		const leaveMessageCanvas = await createLeaveCardMessage(member);
 		await leaveChannel.send({ files: [leaveMessageCanvas] });
 	},
 };

@@ -1,7 +1,7 @@
 const { getColor } = require('@functions/utils/getColor');
 const ru = require('@config/languages/ru.json');
 
-function serverInfoEmbed() {
+const generateInfoEmbed = () => {
 	const defaultBotColor = getColor('default');
 	const embed = {
 		color: defaultBotColor,
@@ -16,5 +16,5 @@ function serverInfoEmbed() {
 	};
 
 	return embed;
-}
-module.exports = { serverInfoEmbed };
+};
+module.exports = { generateInfoEmbed };

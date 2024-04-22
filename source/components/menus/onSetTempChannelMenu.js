@@ -1,13 +1,13 @@
 const { menus } = require('@config/componentsId.json');
 const {
-	createTempChannelName,
-} = require('@functions/modals/setUpTempChannelName');
+	createTempChannelNameModal,
+} = require('@functions/modals/createTempChannelNameModal');
 const {
-	createTempChannelLimit,
-} = require('@functions/modals/setUpTempChannelLimit');
+	createTempChannelLimitModal,
+} = require('@functions/modals/createTempChannelLimitModal');
 const {
-	settingsTempChannel,
-} = require('@functions/menus/setUpSettingsTempChannels');
+	createTempChannelSettings,
+} = require('@functions/menus/createTempChannelSettings');
 const { lockChannel } = require('@functions/utils/JTCSystem/lockChannel');
 const { unlockChannel } = require('@functions/utils/JTCSystem/unlockChannel');
 const { getLocalizedText } = require('@functions/locale/getLocale');
@@ -40,10 +40,14 @@ module.exports = {
 
 		switch (selectedValue) {
 			case menus.values.tempChannelName:
-				await interaction.showModal(await createTempChannelName(interaction));
+				await interaction.showModal(
+					await createTempChannelNameModal(localizedText)
+				);
 				break;
 			case menus.values.tempChannelLimit:
-				await interaction.showModal(await createTempChannelLimit(interaction));
+				await interaction.showModal(
+					await createTempChannelLimitModal(localizedText)
+				);
 				break;
 			case menus.values.tempChannelLock:
 				await lockChannel(interaction, temporaryChannelsSchema, localizedText);
@@ -58,7 +62,7 @@ module.exports = {
 		}
 
 		await interaction.editReply({
-			components: [await settingsTempChannel(interaction)],
+			components: [await createTempChannelSettings(localizedText)],
 		});
 	},
 };

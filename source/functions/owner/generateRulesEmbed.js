@@ -1,7 +1,7 @@
 const { getColor } = require('@functions/utils/getColor');
 const ru = require('@config/languages/ru.json');
 
-function serverRulesEmbed() {
+const generateRulesEmbed = () => {
 	const politeColor = getColor('rules.politeColor');
 	const noSpamColor = getColor('rules.noSpamColor');
 	const personalDataColor = getColor('rules.personalDataColor');
@@ -37,6 +37,6 @@ function serverRulesEmbed() {
 	];
 
 	return rules;
-}
+};
 
-module.exports = { serverRulesEmbed };
+module.exports = { generateRulesEmbed };

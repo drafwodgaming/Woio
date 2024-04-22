@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const {
 	createNewActivityModal,
-} = require('@functions/modals/setUpNewActivity');
+} = require('@functions/modals/createNewActivityModal');
 
 const emojis = require('@config/emojis.json');
 const en = require('@config/languages/en.json');
@@ -63,7 +63,7 @@ module.exports = {
 
 		switch (subCommand) {
 			case en.commands.subcommands.newActivity:
-				const modal = await createNewActivityModal(interaction, roleId);
+				const modal = await createNewActivityModal(localizedText, roleId);
 				return await interaction.showModal(modal);
 			case en.commands.subcommands.searchActivity:
 				const activitySchema = interaction.client.models.get('activity');
@@ -71,7 +71,7 @@ module.exports = {
 					guildId: interaction.guildId,
 				});
 				const activityLinks = activities.map((activity, index) =>
-					formatActivityLink(interaction, activity, index, localizedText)
+					formatActivityLink(interaction, localizedText, activity, index)
 				);
 
 				if (activities.length === 0) {

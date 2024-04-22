@@ -1,4 +1,4 @@
-function getLanguageName(langCode) {
+const getLanguageName = langCode => {
 	const languageNames = {
 		en: 'English',
 		ru: 'Русский',
@@ -6,6 +6,6 @@ function getLanguageName(langCode) {
 	};
 
 	return languageNames[langCode] || langCode;
-}
+};
 
 module.exports = { getLanguageName };

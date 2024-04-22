@@ -1,4 +1,4 @@
-async function deleteEmptyTempChannels(guild) {
+const deleteEmptyTempChannels = async guild => {
 	const temporaryChannelsSchema = guild.client.models.get('temporaryChannels');
 	const tempChannels = await temporaryChannelsSchema.find({
 		guildId: guild.id,
@@ -14,6 +14,6 @@ async function deleteEmptyTempChannels(guild) {
 			await temporaryChannelsSchema.findOneAndDelete({ guildId, creatorId });
 		}
 	}
-}
+};
 
 module.exports = { deleteEmptyTempChannels };

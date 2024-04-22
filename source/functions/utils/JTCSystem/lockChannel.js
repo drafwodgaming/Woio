@@ -1,4 +1,4 @@
-async function lockChannel(interaction, schema, localizedText) {
+const lockChannel = async (interaction, schema, localizedText) => {
 	const { guild, user } = interaction;
 	const { id: guildId, roles: { everyone: everyoneRole } = {} } = guild;
 	const { id: creatorId } = user;
@@ -23,6 +23,6 @@ async function lockChannel(interaction, schema, localizedText) {
 		if (voiceChannel)
 			voiceChannel.permissionOverwrites.edit(everyoneRole, { Connect: false });
 	}
-}
+};
 
 module.exports = { lockChannel };

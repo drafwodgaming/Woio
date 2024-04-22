@@ -1,6 +1,6 @@
 const { colors } = require('@config/botConfig.json');
 
-function getColor(colorName) {
+const getColor = colorName => {
 	const colorPathSegments = colorName.split('.');
 	let currentColorObject = colors;
 
@@ -9,6 +9,6 @@ function getColor(colorName) {
 	}
 
 	return parseInt(currentColorObject);
-}
+};
 
 module.exports = { getColor };

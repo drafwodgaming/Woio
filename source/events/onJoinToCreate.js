@@ -4,8 +4,8 @@ const {
 	deleteEmptyTempChannels,
 } = require('@functions/utils/deleteEmptyTempChannels');
 const {
-	settingsTempChannel,
-} = require('@functions/menus/setUpSettingsTempChannels');
+	createTempChannelSettings,
+} = require('@functions/menus/createTempChannelSettings');
 const { getColor } = require('@functions/utils/getColor');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const mustache = require('mustache');
@@ -71,7 +71,7 @@ module.exports = {
 								title: localizedText.events.joinToCreate.tempVoiceChannelTitle,
 							},
 						],
-						components: [await settingsTempChannel(member)],
+						components: [await createTempChannelSettings(localizedText)],
 					});
 				}
 			}

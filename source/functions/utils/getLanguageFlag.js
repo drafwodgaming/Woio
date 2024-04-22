@@ -1,6 +1,6 @@
 const emojis = require('@config/emojis.json');
 
-function getLanguageFlag(languageCode) {
+const getLanguageFlag = languageCode => {
 	const languageFlags = {
 		en: emojis.englishFlag,
 		ru: emojis.russianFlag,
@@ -8,6 +8,6 @@ function getLanguageFlag(languageCode) {
 	};
 
 	return languageFlags[languageCode] || null;
-}
+};
 
 module.exports = { getLanguageFlag };

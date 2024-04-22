@@ -1,6 +1,6 @@
 const { getColor } = require('@functions/utils/getColor');
 
-function getColorByPercentage(percentage) {
+const getColorByPercentage = percentage => {
 	const RED_THRESHOLD = 30;
 	const ORANGE_THRESHOLD = 50;
 	const YELLOW_THRESHOLD = 80;
@@ -14,6 +14,6 @@ function getColorByPercentage(percentage) {
 	if (percentage <= ORANGE_THRESHOLD) return orangeColor;
 	if (percentage <= YELLOW_THRESHOLD) return yellowColor;
 	return greenColor;
-}
+};
 
 module.exports = { getColorByPercentage };

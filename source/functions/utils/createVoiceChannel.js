@@ -1,12 +1,12 @@
 const { ChannelType, PermissionFlagsBits } = require('discord.js');
 
-async function createVoiceChannel(
+const createVoiceChannel = async (
 	guild,
 	member,
 	channelName,
 	channelSize = 0,
 	parent
-) {
+) => {
 	const memberPermissions = [
 		PermissionFlagsBits.MoveMembers,
 		PermissionFlagsBits.MuteMembers,
@@ -41,6 +41,6 @@ async function createVoiceChannel(
 	});
 
 	return createdChannel;
-}
+};
 
 module.exports = { createVoiceChannel };

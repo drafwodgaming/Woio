@@ -2,34 +2,35 @@ const mustache = require('mustache');
 const emojis = require('@config/emojis.json');
 const { getColor } = require('@functions/utils/getColor');
 
-function generateReportEmbed(
-	selectedReport,
-	descriptionReport,
-	localizedText,
-	interaction
-) {
-	const emoji = emojis[selectedReport];
-	const color = getColor(`reports.${selectedReport}`);
-	const title = mustache.render(
-		localizedText.commands.report[`${selectedReport}Title`],
-		{ [selectedReport]: emoji }
+const generateReportEmbed = (
+	interaction,
+	localization,
+	reportType,
+	reportDescription
+) => {
+	const reportEmoji = emojis[reportType];
+	const reportColor = getColor(`reports.${reportType}`);
+	const reportTitle = mustache.render(
+		localization.commands.report[`${reportType}Title`],
+		{ [reportType]: reportEmoji }
 	);
+	const reportBy = mustache.render(localization.commands.report.reportBy, {
+		user: interaction.user.username,
+		guild: interaction.guild.name,
+	});
 
 	return {
-		color: color,
-		title: title,
-		description: mustache.render(localizedText.commands.report.reportBy, {
-			user: interaction.user.username,
-			guild: interaction.guild.name,
-		}),
+		color: reportColor,
+		title: reportTitle,
+		description: reportBy,
 		fields: [
 			{
-				name: localizedText.commands.report.fields.description,
-				value: `\`\`\`${descriptionReport}\`\`\``,
+				name: localization.commands.report.fields.description,
+				value: `\`\`\`${reportDescription}\`\`\``,
 				inline: true,
 			},
 		],
 	};
-}
+};
 
 module.exports = { generateReportEmbed };

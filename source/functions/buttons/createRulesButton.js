@@ -3,7 +3,7 @@ const { buttons } = require('@config/componentsId.json');
 const emojis = require('@config/emojis.json');
 const ru = require('@config/languages/ru.json');
 
-const serverRulesButton = () =>
+const createRulesButtons = () =>
 	new ActionRowBuilder().addComponents(
 		new ButtonBuilder()
 			.setCustomId(buttons.rulesButton)
@@ -12,4 +12,4 @@ const serverRulesButton = () =>
 			.setEmoji(emojis.rules)
 	);
 
-module.exports = { serverRulesButton };
+module.exports = { createRulesButtons };

@@ -3,7 +3,9 @@ const en = require('@config/languages/en.json');
 const ru = require('@config/languages/ru.json');
 const uk = require('@config/languages/uk.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
-const { reportButtons } = require('@functions/buttons/setUpReport');
+const {
+	createReportButtons,
+} = require('@functions/buttons/createReportButtons');
 const {
 	generateReportEmbed,
 } = require('@functions/embeds/generateReportEmbed');
@@ -54,16 +56,16 @@ module.exports = {
 		const localizedText = await getLocalizedText(interaction);
 
 		const embed = generateReportEmbed(
-			selectedReport,
-			descriptionReport,
+			interaction,
 			localizedText,
-			interaction
+			selectedReport,
+			descriptionReport
 		);
 
 		await interaction.reply({
 			content: localizedText.commands.report.preview,
 			embeds: [embed],
-			components: [await reportButtons(localizedText)],
+			components: [await createReportButtons(localizedText)],
 			fetchReply: true,
 			ephemeral: true,
 		});

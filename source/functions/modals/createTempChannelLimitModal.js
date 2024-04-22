@@ -5,25 +5,22 @@ const {
 	TextInputStyle,
 } = require('discord.js');
 const { modals } = require('@config/componentsId.json');
-const { getLocalizedText } = require('@functions/locale/getLocale');
 
-async function createTempChannelLimit(interaction) {
-	const localizedText = await getLocalizedText(interaction);
-
+const createTempChannelLimitModal = localization => {
 	const componentsData = [
 		{
 			inputId: modals.tempChannelLimitInput,
-			label: localizedText.components.modals.setLimitTempChannel.label,
+			label: localization.components.modals.setLimitTempChannel.label,
 			style: TextInputStyle.Short,
 			placeholder:
-				localizedText.components.modals.setLimitTempChannel
+				localization.components.modals.setLimitTempChannel
 					.unlimitedLimitExample,
 		},
 	];
 
 	const tempChannelLimit = new ModalBuilder()
 		.setCustomId(modals.tempChannelLimit)
-		.setTitle(localizedText.components.modals.setLimitTempChannel.title);
+		.setTitle(localization.components.modals.setLimitTempChannel.title);
 
 	componentsData.forEach(({ inputId, label, style, placeholder }) => {
 		const inputField = new TextInputBuilder()
@@ -38,5 +35,5 @@ async function createTempChannelLimit(interaction) {
 	});
 
 	return tempChannelLimit;
-}
-module.exports = { createTempChannelLimit };
+};
+module.exports = { createTempChannelLimitModal };

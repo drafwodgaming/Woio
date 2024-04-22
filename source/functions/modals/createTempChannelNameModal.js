@@ -5,24 +5,21 @@ const {
 	TextInputStyle,
 } = require('discord.js');
 const { modals } = require('@config/componentsId.json');
-const { getLocalizedText } = require('@functions/locale/getLocale');
 
-async function createTempChannelName(interaction) {
-	const localizedText = await getLocalizedText(interaction);
-
+const createTempChannelNameModal = localization => {
 	const componentsData = [
 		{
 			inputId: modals.tempChannelNameInput,
-			label: localizedText.components.modals.setNameTempChannel.label,
+			label: localization.components.modals.setNameTempChannel.label,
 			style: TextInputStyle.Short,
 			placeholder:
-				localizedText.components.modals.setNameTempChannel.exampleName,
+				localization.components.modals.setNameTempChannel.exampleName,
 		},
 	];
 
 	const tempChannelName = new ModalBuilder()
 		.setCustomId(modals.tempChannelName)
-		.setTitle(localizedText.components.modals.setNameTempChannel.title);
+		.setTitle(localization.components.modals.setNameTempChannel.title);
 
 	componentsData.forEach(({ inputId, label, style, placeholder }) => {
 		const inputField = new TextInputBuilder()
@@ -37,5 +34,5 @@ async function createTempChannelName(interaction) {
 	});
 
 	return tempChannelName;
-}
-module.exports = { createTempChannelName };
+};
+module.exports = { createTempChannelNameModal };

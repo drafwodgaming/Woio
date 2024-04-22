@@ -1,32 +1,26 @@
-function generateActivityEmbed(
+const generateActivityEmbed = (
 	title,
 	description,
-	participantsFieldName,
-	acceptedPlayerIds,
-	maxPlayerCount,
 	creatorId,
-	creatorIdFieldName,
-	color,
+	participants,
+	maxPlayers,
+	creatorFieldName,
+	participantsFieldName,
+	embedColor,
 	ownerAvatarUrl
-) {
-	const participantsFieldValue = acceptedPlayerIds
-		.map(id => `<@${id}>`)
-		.join('\n');
-
-	return {
-		title,
-		description,
-		fields: [
-			{ name: creatorIdFieldName, value: `<@${creatorId}>` },
-			{
-				name: `${participantsFieldName} (${acceptedPlayerIds.length}/${maxPlayerCount})`,
-				value: participantsFieldValue,
-				inline: true,
-			},
-		],
-		color,
-		thumbnail: { url: ownerAvatarUrl },
-	};
-}
+) => ({
+	title,
+	description,
+	fields: [
+		{ name: creatorFieldName, value: `<@${creatorId}>`, inline: true },
+		{
+			name: `${participantsFieldName} (${participants.length}/${maxPlayers})`,
+			value: participants.map(id => `<@${id}>`).join('\n'),
+			inline: true,
+		},
+	],
+	color: embedColor,
+	thumbnail: { url: ownerAvatarUrl },
+});
 
 module.exports = { generateActivityEmbed };

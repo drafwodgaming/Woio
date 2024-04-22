@@ -1,7 +1,7 @@
 const mustache = require('mustache');
 const emojis = require('@config/emojis.json');
 
-function getStatusText(status, localizedText) {
+const getStatusText = (status, localizedText) => {
 	const onlineEmoji = emojis.online;
 	const idleEmoji = emojis.idle;
 	const dndEmoji = emojis.dnd;
@@ -35,6 +35,6 @@ function getStatusText(status, localizedText) {
 				unknownEmoji,
 			});
 	}
-}
+};
 
 module.exports = { getStatusText };

@@ -1,7 +1,7 @@
 const { Events } = require('discord.js');
 const {
-	cardWelcomeMessage,
-} = require('@functions/canvases/setUpCardWelcomeMessage');
+	createWelcomeCardMessage,
+} = require('@functions/canvases/createWelcomeCardMessage');
 
 module.exports = {
 	name: Events.GuildMemberAdd,
@@ -22,7 +22,7 @@ module.exports = {
 
 		if (user.bot || !welcomeChannel) return;
 
-		const welcomeMessageCanvas = await cardWelcomeMessage(member);
+		const welcomeMessageCanvas = await createWelcomeCardMessage(member);
 		await welcomeChannel.send({ files: [welcomeMessageCanvas] });
 	},
 };

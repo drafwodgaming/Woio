@@ -26,7 +26,7 @@ for (const file of handlersFiles) {
 	const handlerFilePath = path.join(handlersDirectory, file);
 	require(handlerFilePath)(client, __dirname);
 }
-async function setUpBot() {
+const setUpBot = async () => {
 	client.eventsHandler();
 	client.commandsHandler();
 	client.componentsHandler();
@@ -37,6 +37,6 @@ async function setUpBot() {
 	await rest.put(Routes.applicationCommands(botConfig.clientId), {
 		body: client.commandsArray,
 	});
-}
+};
 
 setUpBot();
