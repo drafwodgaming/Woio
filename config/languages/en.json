@@ -244,7 +244,7 @@
 					"deletedActivity": "Unable to find the associated activity",
 					"noInGroup": "You are not a member of the group",
 					"successLeaveFromActivity": "You have left the activity",
-					"ownerCannotLeave": "The creator cannot leave the activity. First, it needs to be closed"
+					"ownerCannotLeave": "The creator cannot leave the activity. First, it needs to be closed!"
 				},
 
 				"groupReadyToActivity": {
