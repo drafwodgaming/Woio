@@ -20,14 +20,3 @@ jobs:
           script: |
             cd ~/home
             git pull origin main
-
-      - name: Restart Bot
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.WOIOIP }}
-          username: ${{ secrets.WOIOROOT }}
-          key: ${{ secrets.WOIO_SSH }}
-          script: |
-            cd ~/home
-            docker-compose down
-            docker-compose up -d --build
