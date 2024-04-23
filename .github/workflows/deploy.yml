@@ -20,4 +20,4 @@ jobs:
           script: |
             cd ~/home
             git pull origin main
-            docker-compose restart
+            docker-compose up -d --build
