@@ -202,7 +202,7 @@
 				},
 				"groupReadyToActivity": {
 					"name": "Группа готова",
-					"pingPlayers": "Група {{{acceptedPlayers}}} готова!",
+					"pingPlayers": "{{{acceptedPlayers}}} група готова!",
 					"deleteAfterTime": "Видалення <t:{{deletionTimestampInSeconds}}:R>",
 					"ownerOnly": "Ця дія доступна лише власнику активності"
 				}
