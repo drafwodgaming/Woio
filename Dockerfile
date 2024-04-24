@@ -7,5 +7,6 @@ COPY . .
 FROM node:latest
 WORKDIR /app
 COPY --from=build /app .
-COPY . .
+COPY package*.json ./
+RUN npm ci
 CMD [ "node", "./source/bot.js"]
