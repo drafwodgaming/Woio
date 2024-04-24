@@ -1,13 +1,12 @@
-FROM node:latest as dev
-WORKDIR /opt/app
+FROM node:latest as build
+WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-CMD ["npm", "run", "dev"]
+RUN npm run dev
 
 FROM node:latest
-WORKDIR /opt/app
-COPY --from=dev /opt/app/dist ./dist
-COPY package*.json ./
-RUN npm ci --omit=dev
-CMD ["node", "./dist/bot.js"]
+WORKDIR /app
+COPY --from=builder /app .
+COPY . .
+CMD [ "node", "./source/bot.js"]
