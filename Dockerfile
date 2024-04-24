@@ -9,4 +9,4 @@ FROM node:latest
 WORKDIR /app
 COPY --from=dev /app/package*.json ./
 RUN npm ci --omit=dev
-CMD ["node", "./dist/bot.js"]
+CMD ["node", "dist/bot.js"]
