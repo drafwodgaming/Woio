@@ -7,6 +7,6 @@ RUN npm run build
 
 FROM node:latest
 WORKDIR /app
-COPY --from=builder /app .
+COPY --from=build /app .
 COPY . .
 CMD [ "node", "./source/bot.js"]
