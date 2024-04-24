@@ -10,4 +10,4 @@ WORKDIR /app
 COPY --from=dev /app/dist ./dist
 COPY package*.json ./
 RUN npm ci --omit=dev
-CMD ["node", "dist/bot.js"]
+CMD ["node", "./dist/bot.js"]
