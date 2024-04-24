@@ -1,10 +1,10 @@
-FROM node:latest as build
+FROM node:21-alpine as build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 
-FROM node:latest
+FROM node:21-alpine
 WORKDIR /app
 COPY --from=build /app .
 COPY package*.json ./
