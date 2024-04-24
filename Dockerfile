@@ -6,7 +6,7 @@ COPY . .
 CMD ["npm", "run", "dev"]
 
 FROM node:latest
-WORKDIR /app
+WORKDIR /opt/app
 COPY --from=dev /opt/app/dist ./dist
 COPY package*.json ./
 RUN npm ci --omit=dev
