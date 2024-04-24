@@ -1,7 +1,11 @@
-FROM node:latest
+FROM node:18-alpine AS dev
 WORKDIR /app
-ADD *.json .
+COPY package*.json ./
 RUN npm ci
-ADD . .
 COPY . .
+
+FROM node:18-alpine AS prod
+COPY --from=dev /app/package*.json ./
+RUN npm ci --only=production
+COPY --from=dev /app .
 CMD [ "node", "./source/bot.js"]
