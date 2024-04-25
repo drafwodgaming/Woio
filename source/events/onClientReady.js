@@ -14,7 +14,7 @@ module.exports = {
 	async execute(client) {
 		mongoose.set('strictQuery', false);
 		await mongoose
-			.connect(monoDBTest)
+			.connect(monoDB)
 			.then(() =>
 				console.log(
 					kleur.blue(en.logs.succesMongoDBTitle),
