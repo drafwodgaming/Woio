@@ -1,4 +1,4 @@
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 const ru = require('@config/languages/ru.json');
 
 const generateInfoEmbed = () => {

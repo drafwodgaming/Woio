@@ -1,6 +1,6 @@
 const mustache = require('mustache');
 const emojis = require('@config/emojis.json');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 
 const generateReportEmbed = (
 	interaction,

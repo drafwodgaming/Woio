@@ -3,6 +3,7 @@ const { getLocalizedText } = require('@functions/locale/getLocale');
 const {
 	editActivityMessage,
 } = require('@functions/utils/activity/editActivityMessage');
+
 module.exports = {
 	data: {
 		name: buttons.leaveFromActivity,

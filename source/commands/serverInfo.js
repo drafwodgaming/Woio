@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ChannelType, bold } = require('discord.js');
 const mustache = require('mustache');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 const en = require('@config/languages/en.json');
 const ru = require('@config/languages/ru.json');
 const uk = require('@config/languages/uk.json');

@@ -6,7 +6,7 @@ const { getLocalizedText } = require('@functions/locale/getLocale');
 const {
 	generateActivityEmbed,
 } = require('@functions/embeds/generateActivityEmbed');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 
 module.exports = {
 	data: {

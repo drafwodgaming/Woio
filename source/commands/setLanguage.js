@@ -9,8 +9,8 @@ const uk = require('@config/languages/uk.json');
 const mustache = require('mustache');
 
 const { getLocalizedText } = require('@functions/locale/getLocale');
-const { getLanguageName } = require('@functions/utils/getLanguageName');
-const { getLanguageFlag } = require('@functions/utils/getLanguageFlag');
+const { getLanguageName } = require('@functions/utils/general/getLanguageName');
+const { getLanguageFlag } = require('@functions/utils/general/getLanguageFlag');
 
 module.exports = {
 	data: new SlashCommandBuilder()

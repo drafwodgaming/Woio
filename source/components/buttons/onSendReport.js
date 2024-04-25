@@ -1,5 +1,5 @@
 const { buttons } = require('@config/componentsId.json');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 
 module.exports = {

@@ -11,7 +11,7 @@ const {
 	formatActivityLink,
 } = require('@functions/formatter/formatActivityLink');
 const { getLocalizedText } = require('@functions/locale/getLocale');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 const mustache = require('mustache');
 
 module.exports = {

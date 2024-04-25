@@ -6,7 +6,7 @@ const {
 const {
 	createTempChannelSettings,
 } = require('@functions/menus/createTempChannelSettings');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const mustache = require('mustache');
 
@@ -14,26 +14,26 @@ module.exports = {
 	name: Events.VoiceStateUpdate,
 	async execute(oldState, newState) {
 		const { member } = oldState || newState;
-		const { guild } = member;
-		const guildId = guild.id;
-		const username = member.user.username;
-		const localizedText = await getLocalizedText(member);
+		const { guild, user, client } = member;
+		const { id: guildId } = guild;
+		const username = user.username;
 
-		const joinToCreateSchema = member.client.models.get('joinToCreate');
+		const joinToCreateSchema = client.models.get('joinToCreate');
 		const joinToCreateData = await joinToCreateSchema.findOne({
 			guildId,
 		});
 
-		const temporaryChannels = member.client.models.get('temporaryChannels');
-
 		if (!joinToCreateData) return;
+
+		const temporaryChannels = client.models.get('temporaryChannels');
 
 		const interactionChannelId = joinToCreateData.channelId;
 
-		await deleteEmptyTempChannels(member.guild);
+		await deleteEmptyTempChannels(guild);
 
 		if (interactionChannelId === newState.channelId) {
 			const parentCategory = newState.channel?.parent;
+			const localizedText = await getLocalizedText(member);
 			const channelName = mustache.render(
 				localizedText.events.joinToCreate.channelName,
 				{ username }
@@ -63,8 +63,7 @@ module.exports = {
 					);
 
 					const defaultBotColor = getColor('default');
-
-					await createdVoiceChannel.send({
+					const embedMessage = {
 						embeds: [
 							{
 								color: defaultBotColor,
@@ -72,7 +71,9 @@ module.exports = {
 							},
 						],
 						components: [await createTempChannelSettings(localizedText)],
-					});
+					};
+
+					await createdVoiceChannel.send(embedMessage);
 				}
 			}
 		}

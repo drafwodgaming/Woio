@@ -1,4 +1,6 @@
-const { getGuildLanguage } = require('@functions/utils/getGuildLanguage');
+const {
+	getGuildLanguage,
+} = require('@functions/utils/general/getGuildLanguage');
 
 const getLocalizedText = async interaction => {
 	const localeSchema = interaction.client.models.get('serverLocale');

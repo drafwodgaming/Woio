@@ -3,7 +3,7 @@ const {
 	ChannelType,
 	PermissionFlagsBits,
 } = require('discord.js');
-const { getColor } = require('@functions/utils/getColor');
+const { getColor } = require('@functions/utils/general/getColor');
 
 const emojis = require('@config/emojis.json');
 const en = require('@config/languages/en.json');
