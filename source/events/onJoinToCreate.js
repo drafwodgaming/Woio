@@ -26,7 +26,6 @@ module.exports = {
 		if (!joinToCreateData) return;
 
 		const temporaryChannels = client.models.get('temporaryChannels');
-
 		const interactionChannelId = joinToCreateData.channelId;
 
 		await deleteEmptyTempChannels(guild);
