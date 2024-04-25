@@ -98,7 +98,7 @@
 			"editedChannel": "Welcome channel changed to <#{{channelId}}>",
 			"installedChannel": "Welcome channel set to <#{{channelId}}>. To disable run /welcomechannel disable",
 			"noChannel": "{{{warningEmoji}}} **Welcome channel not set**",
-			"deletedChannel": "Welcome channel deleted",
+			"deletedChannel": "**Welcome channel deleted**",
 			"selectChannel": "Select channel for welcome message",
 			"setupChannel": "Setup channel for welcome message",
 			"disableChannel": "Disable channel for welcome message",
