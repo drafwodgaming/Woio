@@ -11,7 +11,7 @@ const handleMemberEvent = async (member, eventType) => {
 	const channelCache = channels.cache;
 
 	const channelSchema = client.models.get(`${eventType}Channel`);
-	const { channelId: interactionChannelId } = await channelSchema.findOne({
+	const interactionChannelId = await channelSchema.findOne({
 		guildId: guild.id,
 	});
 
