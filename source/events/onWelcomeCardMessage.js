@@ -3,5 +3,5 @@ const { handleMemberEvent } = require('@functions/events/handleMemberEvent');
 
 module.exports = {
 	name: Events.GuildMemberAdd,
-	execute: member => handleMemberEvent(member, 'welcome'),
+	execute: async member => await handleMemberEvent(member, 'welcome'),
 };
