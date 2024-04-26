@@ -1,16 +1,6 @@
-FROM node:alpine
+FROM node:lates
 
 WORKDIR /app
-
-# Установка необходимых пакетов для сборки
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    pkgconfig \
-    pixman-dev \
-    cairo-dev \
-    pango-dev
 
 # Копируем файлы package.json и package-lock.json
 COPY package*.json ./
