@@ -1,10 +1,10 @@
-FROM node:latest as build
+FROM node:alpine as build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 
-FROM node:latest
+FROM node:stable-alpine
 WORKDIR /app
 COPY --from=build /app .
 RUN npm ci --omit=dev
