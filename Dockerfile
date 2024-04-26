@@ -1,4 +1,4 @@
-FROM node:sandervink/node-latest-chrome
+FROM node:latest
 
 WORKDIR /app
 
