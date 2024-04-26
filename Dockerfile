@@ -1,5 +1,8 @@
-FROM node:alpine as build
+FROM node:alpine
+
 WORKDIR /app
+
+# Установка необходимых пакетов для сборки
 RUN apk add --no-cache \
     python3 \
     make \
@@ -9,20 +12,13 @@ RUN apk add --no-cache \
     cairo-dev \
     pango-dev
 
+# Копируем файлы package.json и package-lock.json
 COPY package*.json ./
+
+# Установка зависимостей
 RUN npm ci
+
+# Копируем остальной код приложения
 COPY . .
 
-FROM node:alpine
-WORKDIR /app
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    pkgconfig \
-    pixman-dev \
-    cairo-dev \
-    pango-dev
-COPY --from=build /app .
-RUN npm ci --omit=dev
-CMD [ "node", "./source/bot.js"]
+CMD ["node", "./source/bot.js"]
