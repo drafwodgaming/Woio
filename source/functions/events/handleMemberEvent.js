@@ -18,7 +18,7 @@ const handleMemberEvent = async (member, eventType) => {
 	if (!interactionChannelId) return;
 
 	const interactionChannel = channelCache.find(
-		channel => channel.id === interactionChannelId
+		channel => channel.id === interactionChannelId.channelId
 	);
 
 	if (user.bot || !interactionChannel) return;
