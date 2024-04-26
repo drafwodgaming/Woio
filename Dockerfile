@@ -1,4 +1,4 @@
-FROM node:lates
+FROM node:sandervink/node-latest-chrome
 
 WORKDIR /app
 
