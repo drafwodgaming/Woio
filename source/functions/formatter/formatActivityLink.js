@@ -1,6 +1,6 @@
 const mustache = require('mustache');
 
-const formatActivityLink = (interaction, localization, activity, index) => {
+const formatActivityLink = ({ interaction, locale, activity, index }) => {
 	const {
 		name,
 		description,
@@ -13,15 +13,15 @@ const formatActivityLink = (interaction, localization, activity, index) => {
 	const playersInfo = `${acceptedPlayers.length}/${maxPlayersCount}`;
 
 	const formattedName = mustache.render(
-		localization.commands.activity.searchActivity.nameLabel,
+		locale.commands.activity.searchActivity.nameLabel,
 		{ name }
 	);
 	const formattedDescription = mustache.render(
-		localization.commands.activity.searchActivity.descriptionLabel,
+		locale.commands.activity.searchActivity.descriptionLabel,
 		{ description }
 	);
 	const formattedPlayers = mustache.render(
-		localization.commands.activity.searchActivity.playersCountLabel,
+		locale.commands.activity.searchActivity.playersCountLabel,
 		{ playersInfo }
 	);
 

@@ -17,7 +17,7 @@ module.exports = {
 	async execute(interaction) {
 		const guildId = interaction.guild.id;
 		const memberId = interaction.user.id;
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 		const temporaryChannelsSchema =
 			interaction.client.models.get('temporaryChannels');
 
@@ -29,7 +29,7 @@ module.exports = {
 		if (!existingChannel) {
 			await interaction.deferUpdate();
 			await interaction.followUp({
-				content: localizedText.components.menus.tempChannel.noCreate,
+				content: locale.components.menus.tempChannel.noCreate,
 				ephemeral: true,
 			});
 			await interaction.editReply({
@@ -40,29 +40,21 @@ module.exports = {
 
 		switch (selectedValue) {
 			case menus.values.tempChannelName:
-				await interaction.showModal(
-					await createTempChannelNameModal(localizedText)
-				);
+				await interaction.showModal(await createTempChannelNameModal(locale));
 				break;
 			case menus.values.tempChannelLimit:
-				await interaction.showModal(
-					await createTempChannelLimitModal(localizedText)
-				);
+				await interaction.showModal(await createTempChannelLimitModal(locale));
 				break;
 			case menus.values.tempChannelLock:
-				await lockChannel(interaction, temporaryChannelsSchema, localizedText);
+				await lockChannel(interaction, temporaryChannelsSchema, locale);
 				break;
 			case menus.values.tempChannelUnlock:
-				await unlockChannel(
-					interaction,
-					temporaryChannelsSchema,
-					localizedText
-				);
+				await unlockChannel(interaction, temporaryChannelsSchema, locale);
 				break;
 		}
 
 		await interaction.editReply({
-			components: [await createTempChannelSettings(localizedText)],
+			components: [await createTempChannelSettings(locale)],
 		});
 	},
 };

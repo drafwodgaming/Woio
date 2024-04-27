@@ -47,7 +47,7 @@
 			"description": "Set the language for the server",
 			"setLanguage": "Set the language for the server",
 			"chooseLanguage": "Choose the language",
-			"languageUpdated": "{{{flag}}} Language set to {{language}}"
+			"languageUpdated": "{{{flag}}} **Language set to {{language}}**"
 		},
 
 		"serverInfo": {
@@ -95,8 +95,8 @@
 
 		"welcomeChannel": {
 			"name": "welcomechannel",
-			"editedChannel": "Welcome channel changed to <#{{channelId}}>",
-			"installedChannel": "Welcome channel set to <#{{channelId}}>. To disable run /welcomechannel disable",
+			"editedChannel": "**Welcome channel changed to** <#{{channelId}}>",
+			"installedChannel": "**Welcome channel set to <#{{channelId}}>. To disable run /welcomechannel disable**",
 			"noChannel": "{{{warningEmoji}}} **Welcome channel not set**",
 			"deletedChannel": "**Welcome channel deleted**",
 			"selectChannel": "Select channel for welcome message",
@@ -107,10 +107,10 @@
 
 		"leaveChannel": {
 			"name": "leavechannel",
-			"editedChannel": "Leave channel changed to <#{{channelId}}>",
-			"installedChannel": "Leave channel set to <#{{channelId}}>. To disabled run /leavechannel disable",
+			"editedChannel": "**Leave channel changed to <#{{channelId}}>**",
+			"installedChannel": "**Leave channel set to <#{{channelId}}>. To disabled run /leavechannel disable**",
 			"noChannel": "{{{warningEmoji}}} **Leave channel not set**",
-			"deletedChannel": "Leave channel deleted",
+			"deletedChannel": "**Leave channel deleted**",
 			"selectChannel": "Select channel for leave message",
 			"setupChannel": "Setup channel for leave message",
 			"disableChannel": "Disable channel for leave message",
@@ -119,10 +119,10 @@
 
 		"joinToCreateChannel": {
 			"name": "jointocreate",
-			"editedChannel": "\"Join To Create\" channel changed to <#{{channelId}}>",
-			"installedChannel": "\"Join To Create\" channel set to <#{{channelId}}>. To disabled run /jointocreate disable",
+			"editedChannel": "**\"Join To Create\" channel changed to <#{{channelId}}>**",
+			"installedChannel": "**\"Join To Create\" channel set to <#{{channelId}}>. To disabled run /jointocreate disable**",
 			"noChannel": "{{{warningEmoji}}} **\"Join To Create\" channel not set**",
-			"deletedChannel": "\"Join To Create\" channel deleted",
+			"deletedChannel": "**\"Join To Create\" channel deleted**",
 			"selectChannel": "Select \"Join To Create\"",
 			"setupChannel": "Setup \"Join To Create\" channel",
 			"disableChannel": "Disable \"Join To Create\"",
@@ -138,7 +138,7 @@
 			"suggestionTitle": "{{{suggestion}}} | Suggestion",
 			"otherTitle": "{{{other}}} | Other",
 			"reportBy": "Report by {{user}} (Server: {{guild}})",
-			"succesSendReport": "Репорт успешно отправлен",
+			"succesSendReport": "**Репорт успешно отправлен**",
 			"fields": {
 				"description": "Description"
 			},
@@ -262,10 +262,6 @@
 			"channelName": "🔉| {{username}}'s channel",
 			"tempVoiceChannelTitle": "Temporary Voice Channel"
 		}
-	},
-
-	"other": {
-		"loading": "{{{loadingEmoji}}} | Loading"
 	},
 
 	"logs": {

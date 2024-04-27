@@ -15,7 +15,7 @@ module.exports = {
 		const isButton = interaction.isButton();
 		const isStringSelectMenu = interaction.isStringSelectMenu();
 
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 
 		switch (true) {
 			case isChatInputCommand:
@@ -25,7 +25,7 @@ module.exports = {
 
 				if (!command) return;
 
-				const developerOnlyMessage = localizedText.events.developerOnly;
+				const developerOnlyMessage = locale.events.developerOnly;
 				const defaultBotColor = getColor('default');
 				if (command.developer && interaction.user.id !== onwerId) {
 					return interaction.reply({

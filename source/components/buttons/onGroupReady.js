@@ -1,3 +1,4 @@
+const { userMention } = require('discord.js');
 const { buttons } = require('@config/componentsId.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const mustache = require('mustache');
@@ -10,40 +11,43 @@ module.exports = {
 		name: buttons.groupReadyToActivity,
 	},
 	async execute(interaction) {
-		const { user, message } = interaction;
-		const localizedText = await getLocalizedText(interaction);
-		const languageConfig =
-			localizedText.components.buttons.activity.groupReadyToActivity;
+		const { user, message, client } = interaction;
+		const { id: messageId } = message;
+		const locale = await getLocalizedText(interaction);
 
-		const activitySchema = interaction.client.models.get('activity');
-		const activityRecord = await activitySchema.findOne({
-			messageId: message.id,
-		});
+		const activitySchema = client.models.get('activity');
+		const activityRecord = await activitySchema.findOne({ messageId });
 
-		const acceptedPlayer = user.id;
+		const replyEphemeral = content =>
+			interaction.reply({ content, ephemeral: true });
 
-		const isOwner = activityRecord.ownerId === acceptedPlayer;
-
+		const isOwner = activityRecord.ownerId === user.id;
 		if (!isOwner)
-			return await interaction.reply({
-				content: languageConfig.ownerOnly,
-				ephemeral: true,
-			});
+			return replyEphemeral(
+				locale.components.buttons.activity.groupReadyToActivity.ownerOnly
+			);
 
 		const acceptedPlayers = activityRecord.acceptedPlayers
-			.map(playerId => `<@${playerId}>`)
+			.map(playerId => userMention(playerId))
 			.join(', ');
 
-		await editActivityMessage(interaction, activityRecord, localizedText, true);
+		await editActivityMessage(interaction, activityRecord, locale);
 
-		setTimeout(async () => {
-			await message.delete();
-
-			await activitySchema.findOneAndDelete({ messageId: message.id });
-		}, 10000);
-
-		await interaction.reply({
-			content: mustache.render(languageConfig.pingPlayers, { acceptedPlayers }),
+		const deleteMessagePromise = message.delete();
+		const deleteActivityPromise = activitySchema.findOneAndDelete({
+			messageId: message.id,
 		});
+		const replyPromise = replyEphemeral(
+			mustache.render(
+				locale.components.buttons.activity.groupReadyToActivity.pingPlayers,
+				{ acceptedPlayers }
+			)
+		);
+
+		await Promise.all([
+			deleteMessagePromise,
+			deleteActivityPromise,
+			replyPromise,
+		]);
 	},
 };

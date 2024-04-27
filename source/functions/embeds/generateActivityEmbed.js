@@ -1,4 +1,4 @@
-const generateActivityEmbed = (
+const generateActivityEmbed = ({
 	title,
 	description,
 	creatorId,
@@ -7,8 +7,8 @@ const generateActivityEmbed = (
 	creatorFieldName,
 	participantsFieldName,
 	embedColor,
-	ownerAvatarUrl
-) => ({
+	ownerAvatarUrl,
+}) => ({
 	title,
 	description,
 	fields: [

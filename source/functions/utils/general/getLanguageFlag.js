@@ -7,7 +7,7 @@ const getLanguageFlag = languageCode => {
 		uk: emojis.ukraineFlag,
 	};
 
-	return languageFlags[languageCode] || null;
+	return languageFlags[languageCode] || languageCode;
 };
 
 module.exports = { getLanguageFlag };

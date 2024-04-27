@@ -2,19 +2,13 @@ const mustache = require('mustache');
 const emojis = require('@config/emojis.json');
 const { getColor } = require('@functions/utils/general/getColor');
 
-const generateReportEmbed = (
-	interaction,
-	localization,
-	reportType,
-	reportDescription
-) => {
-	const reportEmoji = emojis[reportType];
-	const reportColor = getColor(`reports.${reportType}`);
-	const reportTitle = mustache.render(
-		localization.commands.report[`${reportType}Title`],
-		{ [reportType]: reportEmoji }
-	);
-	const reportBy = mustache.render(localization.commands.report.reportBy, {
+const generateReportEmbed = ({ interaction, locale, type, description }) => {
+	const reportEmoji = emojis[type];
+	const reportColor = getColor(`reports.${type}`);
+	const reportTitle = mustache.render(locale.commands.report[`${type}Title`], {
+		[type]: reportEmoji,
+	});
+	const reportBy = mustache.render(locale.commands.report.reportBy, {
 		user: interaction.user.username,
 		guild: interaction.guild.name,
 	});
@@ -25,8 +19,8 @@ const generateReportEmbed = (
 		description: reportBy,
 		fields: [
 			{
-				name: localization.commands.report.fields.description,
-				value: `\`\`\`${reportDescription}\`\`\``,
+				name: locale.commands.report.fields.description,
+				value: `\`\`\`${description}\`\`\``,
 				inline: true,
 			},
 		],

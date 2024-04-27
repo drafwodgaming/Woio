@@ -1,7 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const {
 	createReportButtons,
@@ -10,21 +7,25 @@ const {
 	generateReportEmbed,
 } = require('@functions/embeds/generateReportEmbed');
 
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.report.name)
-		.setDescription(en.commands.report.description)
+		.setName(enCommands.report.name)
+		.setDescription(enCommands.report.description)
 		.setDescriptionLocalizations({
-			ru: ru.commands.report.description,
-			uk: uk.commands.report.description,
+			ru: ruCommands.report.description,
+			uk: ukCommands.report.description,
 		})
 		.addStringOption(option =>
 			option
-				.setName(en.commands.options.typeReportOption)
-				.setDescription(en.commands.report.typeDescription)
+				.setName(enCommands.options.typeReportOption)
+				.setDescription(enCommands.report.typeDescription)
 				.setDescriptionLocalizations({
-					ru: ru.commands.report.typeDescription,
-					uk: uk.commands.report.typeDescription,
+					ru: ruCommands.report.typeDescription,
+					uk: ukCommands.report.typeDescription,
 				})
 				.setRequired(true)
 				.addChoices(
@@ -35,37 +36,37 @@ module.exports = {
 		)
 		.addStringOption(option =>
 			option
-				.setName(en.commands.options.reportDescriptionOption)
-				.setDescription(en.commands.report.reportDescription)
+				.setName(enCommands.options.reportDescriptionOption)
+				.setDescription(enCommands.report.reportDescription)
 				.setDescriptionLocalizations({
-					ru: ru.commands.report.reportDescription,
-					uk: uk.commands.report.reportDescription,
+					ru: ruCommands.report.reportDescription,
+					uk: ukCommands.report.reportDescription,
 				})
 				.setRequired(true)
 		)
 		.setDMPermission(false),
 	async execute(interaction) {
 		const { options } = interaction;
+		const locale = await getLocalizedText(interaction);
+
 		const selectedReport = options.getString(
-			en.commands.options.typeReportOption
+			enCommands.options.typeReportOption
 		);
-		const descriptionReport = options.getString(
-			en.commands.options.reportDescriptionOption
+		const description = options.getString(
+			enCommands.options.reportDescriptionOption
 		);
 
-		const localizedText = await getLocalizedText(interaction);
-
-		const embed = generateReportEmbed(
+		const embed = generateReportEmbed({
 			interaction,
-			localizedText,
-			selectedReport,
-			descriptionReport
-		);
+			locale,
+			type: selectedReport,
+			description,
+		});
 
 		await interaction.reply({
-			content: localizedText.commands.report.preview,
+			content: locale.commands.report.preview,
 			embeds: [embed],
-			components: [await createReportButtons(localizedText)],
+			components: [await createReportButtons(locale)],
 			fetchReply: true,
 			ephemeral: true,
 		});

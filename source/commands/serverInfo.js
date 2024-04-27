@@ -1,30 +1,28 @@
 const { SlashCommandBuilder, ChannelType, bold } = require('discord.js');
 const mustache = require('mustache');
 const { getColor } = require('@functions/utils/general/getColor');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
 const emojis = require('@config/emojis.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.serverInfo.name)
-		.setDescription(en.commands.serverInfo.description)
+		.setName(enCommands.serverInfo.name)
+		.setDescription(enCommands.serverInfo.description)
 		.setDescriptionLocalizations({
-			ru: ru.commands.serverInfo.description,
-			uk: uk.commands.serverInfo.description,
+			ru: ruCommands.serverInfo.description,
+			uk: ukCommands.serverInfo.description,
 		})
 		.setDMPermission(false),
 	async execute(interaction) {
 		const { guild } = interaction;
-		const { members, roles, channels } = guild;
 		const { name, ownerId, createdTimestamp } = guild;
+		const { members, roles, channels, id: guildId } = guild;
 
-		const guildId = guild.id;
-
-		const localizedText = await getLocalizedText(interaction);
-
+		const locale = await getLocalizedText(interaction);
 		const defaultBotColor = getColor('default');
 
 		const guildMembersCount = members.cache.filter(
@@ -76,92 +74,84 @@ module.exports = {
 		const guildRolesCount = roles.cache.size;
 
 		const description =
-			interaction.guild.description ||
-			localizedText.commands.serverInfo.noDescription;
+			guild.description || locale.commands.serverInfo.noDescription;
 
 		const serverInfoEmbed = {
 			color: defaultBotColor,
 			description: bold(description),
 			fields: [
 				{
-					name: localizedText.commands.serverInfo.generalLabel,
+					name: locale.commands.serverInfo.generalLabel,
 					value: [
-						mustache.render(localizedText.commands.serverInfo.ownerId, {
+						mustache.render(locale.commands.serverInfo.ownerId, {
 							ownerId,
 						}),
-						mustache.render(localizedText.commands.serverInfo.createdAt, {
+						mustache.render(locale.commands.serverInfo.createdAt, {
 							guildCreatedAt: `<t:${parseInt(createdTimestamp / 1000)}:R>`,
 						}),
 					].join('\n'),
 				},
 				{
-					name: mustache.render(
-						localizedText.commands.serverInfo.totalMembersCount,
-						{ totalMembersCount }
-					),
+					name: mustache.render(locale.commands.serverInfo.totalMembersCount, {
+						totalMembersCount,
+					}),
 					value: [
-						mustache.render(
-							localizedText.commands.serverInfo.guildMembersCount,
-							{ guildMembersCount }
-						),
-						mustache.render(localizedText.commands.serverInfo.guildBotsCount, {
+						mustache.render(locale.commands.serverInfo.guildMembersCount, {
+							guildMembersCount,
+						}),
+						mustache.render(locale.commands.serverInfo.guildBotsCount, {
 							botMembersCount,
 						}),
 					].join('\n'),
 				},
 				{
-					name: mustache.render(
-						localizedText.commands.serverInfo.totalChannelsCount,
-						{ guildChannels }
-					),
+					name: mustache.render(locale.commands.serverInfo.totalChannelsCount, {
+						guildChannels,
+					}),
 					value: [
-						mustache.render(
-							localizedText.commands.serverInfo.textChannelsCount,
-							{ textChannelsIco, textChannels }
-						),
-						mustache.render(
-							localizedText.commands.serverInfo.voiceChannelsCount,
-							{ voiceChannelsIco, voiceChannels }
-						),
-						mustache.render(localizedText.commands.serverInfo.categoriesCount, {
+						mustache.render(locale.commands.serverInfo.textChannelsCount, {
+							textChannelsIco,
+							textChannels,
+						}),
+						mustache.render(locale.commands.serverInfo.voiceChannelsCount, {
+							voiceChannelsIco,
+							voiceChannels,
+						}),
+						mustache.render(locale.commands.serverInfo.categoriesCount, {
 							categoriesIco,
 							guildCategories,
 						}),
 						mustache.render(
-							localizedText.commands.serverInfo.annnouncementChannelsCount,
+							locale.commands.serverInfo.annnouncementChannelsCount,
 							{ annnouncementChannelIco, annnouncementChannel }
 						),
-						mustache.render(
-							localizedText.commands.serverInfo.stageChannelsCount,
-							{ stageChannelIco, stageChannel }
-						),
-						mustache.render(localizedText.commands.serverInfo.forumCount, {
+						mustache.render(locale.commands.serverInfo.stageChannelsCount, {
+							stageChannelIco,
+							stageChannel,
+						}),
+						mustache.render(locale.commands.serverInfo.forumCount, {
 							forumIco,
 							forum,
 						}),
 					].join(' | '),
 				},
 				{
-					name: mustache.render(
-						localizedText.commands.serverInfo.totalEmojisCount,
-						{ totalEmojisCount }
-					),
+					name: mustache.render(locale.commands.serverInfo.totalEmojisCount, {
+						totalEmojisCount,
+					}),
 					value: [
-						mustache.render(
-							localizedText.commands.serverInfo.animatedEmojisCount,
-							{ animatedEmojisCount }
-						),
-						mustache.render(
-							localizedText.commands.serverInfo.staticEmojisCount,
-							{ staticEmojisCount }
-						),
+						mustache.render(locale.commands.serverInfo.animatedEmojisCount, {
+							animatedEmojisCount,
+						}),
+						mustache.render(locale.commands.serverInfo.staticEmojisCount, {
+							staticEmojisCount,
+						}),
 					].join('\n'),
 				},
 				{
-					name: mustache.render(
-						localizedText.commands.serverInfo.guildRolesCount,
-						{ guildRolesCount }
-					),
+					name: mustache.render(locale.commands.serverInfo.guildRolesCount, {
+						guildRolesCount,
+					}),
 					value: guildRoles,
 				},
 			],

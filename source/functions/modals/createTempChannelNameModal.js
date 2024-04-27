@@ -6,20 +6,19 @@ const {
 } = require('discord.js');
 const { modals } = require('@config/componentsId.json');
 
-const createTempChannelNameModal = localization => {
+const createTempChannelNameModal = locale => {
 	const componentsData = [
 		{
 			inputId: modals.tempChannelNameInput,
-			label: localization.components.modals.setNameTempChannel.label,
+			label: locale.components.modals.setNameTempChannel.label,
 			style: TextInputStyle.Short,
-			placeholder:
-				localization.components.modals.setNameTempChannel.exampleName,
+			placeholder: locale.components.modals.setNameTempChannel.exampleName,
 		},
 	];
 
 	const tempChannelName = new ModalBuilder()
 		.setCustomId(modals.tempChannelName)
-		.setTitle(localization.components.modals.setNameTempChannel.title);
+		.setTitle(locale.components.modals.setNameTempChannel.title);
 
 	componentsData.forEach(({ inputId, label, style, placeholder }) => {
 		const inputField = new TextInputBuilder()

@@ -6,21 +6,20 @@ const {
 } = require('discord.js');
 const { modals } = require('@config/componentsId.json');
 
-const createTempChannelLimitModal = localization => {
+const createTempChannelLimitModal = locale => {
 	const componentsData = [
 		{
 			inputId: modals.tempChannelLimitInput,
-			label: localization.components.modals.setLimitTempChannel.label,
+			label: locale.components.modals.setLimitTempChannel.label,
 			style: TextInputStyle.Short,
 			placeholder:
-				localization.components.modals.setLimitTempChannel
-					.unlimitedLimitExample,
+				locale.components.modals.setLimitTempChannel.unlimitedLimitExample,
 		},
 	];
 
 	const tempChannelLimit = new ModalBuilder()
 		.setCustomId(modals.tempChannelLimit)
-		.setTitle(localization.components.modals.setLimitTempChannel.title);
+		.setTitle(locale.components.modals.setLimitTempChannel.title);
 
 	componentsData.forEach(({ inputId, label, style, placeholder }) => {
 		const inputField = new TextInputBuilder()

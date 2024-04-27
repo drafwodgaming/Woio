@@ -5,31 +5,32 @@ const {
 } = require('discord.js');
 const { profileImage } = require('discord-arts');
 const { getColor } = require('@functions/utils/general/getColor');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const mustache = require('mustache');
 const {
 	getStatusText,
 } = require('@source/functions/utils/userInfo/getStatusText');
 
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.userInfo.name)
-		.setDescription(en.commands.userInfo.description)
+		.setName(enCommands.userInfo.name)
+		.setDescription(enCommands.userInfo.description)
 		.setDescriptionLocalizations({
-			ru: ru.commands.userInfo.description,
-			uk: uk.commands.userInfo.description,
+			ru: ruCommands.userInfo.description,
+			uk: ukCommands.userInfo.description,
 		})
 		.setDMPermission(false)
 		.addUserOption(option =>
 			option
-				.setName(en.commands.options.userOption)
-				.setDescription(en.commands.userInfo.userOption)
+				.setName(enCommands.options.userOption)
+				.setDescription(enCommands.userInfo.userOption)
 				.setDescriptionLocalizations({
-					ru: ru.commands.userInfo.userOption,
-					uk: uk.commands.userInfo.userOption,
+					ru: ruCommands.userInfo.userOption,
+					uk: ukCommands.userInfo.userOption,
 				})
 				.setRequired(false)
 		)
@@ -40,12 +41,13 @@ module.exports = {
 	 */
 	async execute(interaction) {
 		await interaction.deferReply();
-		const localizedText = await getLocalizedText(interaction);
-		const defaultBotColor = getColor('default');
 		const { options, member } = interaction;
 
+		const locale = await getLocalizedText(interaction);
+		const defaultBotColor = getColor('default');
+
 		const targetUser =
-			options.getMember(en.commands.options.userOption) || member;
+			options.getMember(enCommands.options.userOption) || member;
 
 		const userCreatedAt = targetUser.user.createdAt;
 
@@ -55,24 +57,23 @@ module.exports = {
 		const imageAttachment = new AttachmentBuilder(profileImageBuffer, {
 			name: 'profile.png',
 		});
+
 		const memberJoinedTime = targetUser.joinedAt;
-		const roleCache = targetUser.roles.cache.map(role => role);
+		const roleCache = targetUser.roles.cache;
 
 		const userRoles = roleCache
 			.filter(role => role.id !== targetUser.guild.roles.everyone.id)
+			.map(role => role)
 			.slice(0, 3)
-			.join(' ');
-
-		const userRolesCount = targetUser.roles.cache.size;
+			.join(', ');
+		const userRolesCount = roleCache.size;
 
 		const { status = 'offline' } = targetUser.presence || {};
-		const statusText = getStatusText(status, localizedText);
-		const userInfoTitle = mustache.render(
-			localizedText.commands.userInfo.title
-		);
-		const imageEmbed = {
-			url: 'attachment://profile.png',
-		};
+		const statusText = getStatusText(status, locale);
+
+		const userInfoTitle = locale.commands.userInfo.title;
+
+		const imageEmbed = { url: 'attachment://profile.png' };
 
 		const userInfoEmbed = {
 			color: defaultBotColor,
@@ -81,28 +82,28 @@ module.exports = {
 			timestamp: new Date(),
 			fields: [
 				{
-					name: mustache.render(localizedText.commands.userInfo.createdAt),
-					value: mustache.render(localizedText.commands.userInfo.createdTime, {
+					name: locale.commands.userInfo.createdAt,
+					value: mustache.render(locale.commands.userInfo.createdTime, {
 						userCreatedAt: `<t:${Math.floor(userCreatedAt / 1000)}:R>`,
 					}),
 					inline: true,
 				},
 				{
-					name: mustache.render(localizedText.commands.userInfo.joinedAt),
-					value: mustache.render(localizedText.commands.userInfo.joinedTime, {
+					name: locale.commands.userInfo.joinedAt,
+					value: mustache.render(locale.commands.userInfo.joinedTime, {
 						memberJoinedTime: `<t:${Math.floor(memberJoinedTime / 1000)}:R>`,
 					}),
 					inline: true,
 				},
 				{
-					name: mustache.render(localizedText.commands.userInfo.memberRoles),
+					name: locale.commands.userInfo.memberRoles,
 					value:
 						userRolesCount > 0
 							? userRoles
-							: mustache.render(localizedText.commands.userInfo.emptyRolesList),
+							: locale.commands.userInfo.emptyRolesList,
 				},
 				{
-					name: mustache.render(localizedText.commands.userInfo.statusLabel),
+					name: locale.commands.userInfo.statusLabel,
 					value: statusText,
 					inline: true,
 				},

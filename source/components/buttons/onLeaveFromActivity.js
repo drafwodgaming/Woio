@@ -9,43 +9,45 @@ module.exports = {
 		name: buttons.leaveFromActivity,
 	},
 	async execute(interaction) {
-		const { user, message } = interaction;
-		const localeText = await getLocalizedText(interaction);
-		const langConfig = localeText.components.buttons.activity.leaveFromActivity;
-		const activityModel = interaction.client.models.get('activity');
-		const activityRecord = await activityModel.findOne({
-			messageId: message.id,
-		});
+		const { user, message, client } = interaction;
+		const { id: messageId } = message;
+		const locale = await getLocalizedText(interaction);
+		const activityModel = client.models.get('activity');
+
+		const activityRecord = await activityModel.findOne({ messageId });
+
+		const replyEphemeral = content =>
+			interaction.reply({ content, ephemeral: true });
 
 		if (!activityRecord)
-			return interaction.reply({
-				content: langConfig.deletedActivity,
-				ephemeral: true,
-			});
+			return replyEphemeral(
+				locale.components.buttons.activity.leaveFromActivity.deletedActivity
+			);
 
-		const playerId = user.id;
+		const isOwner = activityRecord.ownerId === user.id;
+		if (isOwner)
+			return replyEphemeral(
+				locale.components.buttons.activity.leaveFromActivity.ownerCannotLeave
+			);
 
-		const isPlayerInGroup = activityRecord.acceptedPlayers.includes(playerId);
-		const isOwner = activityRecord.ownerId === playerId;
-
-		if (!isPlayerInGroup || isOwner) {
-			const replyContent = isOwner
-				? langConfig.ownerCannotLeave
-				: langConfig.noInGroup;
-			return interaction.reply({ content: replyContent, ephemeral: true });
-		}
+		const isPlayerInGroup = activityRecord.acceptedPlayers.includes(user.id);
+		user.id;
+		if (!isPlayerInGroup)
+			return replyEphemeral(
+				locale.components.buttons.activity.leaveFromActivity.noInGroup
+			);
 
 		const updatedEvent = await activityModel.findOneAndUpdate(
-			{ messageId: message.id },
-			{ $pull: { acceptedPlayers: playerId } },
+			{ messageId },
+			{ $pull: { acceptedPlayers: user.id } },
 			{ upsert: true, new: true }
 		);
 
-		await editActivityMessage(interaction, updatedEvent, localeText, false);
+		await editActivityMessage(interaction, updatedEvent, locale);
 
-		await interaction.reply({
-			content: langConfig.successLeaveFromActivity,
-			ephemeral: true,
-		});
+		await replyEphemeral(
+			locale.components.buttons.activity.leaveFromActivity
+				.successLeaveFromActivity
+		);
 	},
 };

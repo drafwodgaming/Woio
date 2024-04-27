@@ -1,4 +1,4 @@
-const unlockChannel = async (interaction, schema, localizedText) => {
+const unlockChannel = async (interaction, schema, locale) => {
 	const { guild, user } = interaction;
 	const { id: guildId, roles: { everyone: everyoneRole } = {} } = guild;
 	const { id: creatorId } = user;
@@ -13,7 +13,7 @@ const unlockChannel = async (interaction, schema, localizedText) => {
 	]);
 
 	const successMessage =
-		localizedText?.components?.menus?.tempChannel?.unlockChannel?.successUnlock;
+		locale?.components?.menus?.tempChannel?.unlockChannel?.successUnlock;
 	if (successMessage)
 		await interaction.followUp({ content: successMessage, ephemeral: true });
 

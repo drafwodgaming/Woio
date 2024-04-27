@@ -2,11 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const {
 	createNewActivityModal,
 } = require('@functions/modals/createNewActivityModal');
-
 const emojis = require('@config/emojis.json');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
 const {
 	formatActivityLink,
 } = require('@functions/formatter/formatActivityLink');
@@ -14,47 +10,51 @@ const { getLocalizedText } = require('@functions/locale/getLocale');
 const { getColor } = require('@functions/utils/general/getColor');
 const mustache = require('mustache');
 
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.activity.name)
-		.setDescription(en.commands.activity.description)
+		.setName(enCommands.activity.name)
+		.setDescription(enCommands.activity.description)
 		.setDescriptionLocalizations({
-			ru: ru.commands.activity.description,
-			uk: uk.commands.activity.description,
+			ru: ruCommands.activity.description,
+			uk: ukCommands.activity.description,
 		})
 		.setDMPermission(false)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName(en.commands.subcommands.newActivity)
-				.setDescription(en.commands.activity.newActivity.description)
+				.setName(enCommands.subcommands.newActivity)
+				.setDescription(enCommands.activity.newActivity.description)
 				.setDescriptionLocalizations({
-					ru: ru.commands.activity.newActivity.description,
-					uk: uk.commands.activity.newActivity.description,
+					ru: ruCommands.activity.newActivity.description,
+					uk: ukCommands.activity.newActivity.description,
 				})
 				.addRoleOption(option =>
 					option
-						.setName(en.commands.options.roleOption)
-						.setDescription(en.commands.activity.newActivity.selectPingRole)
+						.setName(enCommands.options.roleOption)
+						.setDescription(enCommands.activity.newActivity.selectPingRole)
 						.setDescriptionLocalizations({
-							ru: ru.commands.activity.newActivity.selectPingRole,
-							uk: uk.commands.activity.newActivity.selectPingRole,
+							ru: ruCommands.activity.newActivity.selectPingRole,
+							uk: ukCommands.activity.newActivity.selectPingRole,
 						})
 						.setRequired(true)
 				)
 		)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName(en.commands.subcommands.searchActivity)
-				.setDescription(en.commands.activity.searchActivity.description)
+				.setName(enCommands.subcommands.searchActivity)
+				.setDescription(enCommands.activity.searchActivity.description)
 				.setDescriptionLocalizations({
-					ru: ru.commands.activity.searchActivity.description,
-					uk: uk.commands.activity.searchActivity.description,
+					ru: ruCommands.activity.searchActivity.description,
+					uk: ukCommands.activity.searchActivity.description,
 				})
 		),
 	async execute(interaction) {
 		const subCommand = interaction.options.getSubcommand();
-		const localizedText = await getLocalizedText(interaction);
-		const roleId = interaction.options.getRole(en.commands.options.roleOption);
+		const locale = await getLocalizedText(interaction);
+		const roleId = interaction.options.getRole(enCommands.options.roleOption);
 
 		const linksColor = getColor('linksBlue');
 		const defaultBotColor = getColor('default');
@@ -62,22 +62,23 @@ module.exports = {
 		let responseEmbed;
 
 		switch (subCommand) {
-			case en.commands.subcommands.newActivity:
-				const modal = await createNewActivityModal(localizedText, roleId);
+			case enCommands.subcommands.newActivity:
+				const modal = await createNewActivityModal(locale, roleId);
 				return await interaction.showModal(modal);
-			case en.commands.subcommands.searchActivity:
+
+			case enCommands.subcommands.searchActivity:
 				const activitySchema = interaction.client.models.get('activity');
 				const activities = await activitySchema.find({
 					guildId: interaction.guildId,
 				});
 				const activityLinks = activities.map((activity, index) =>
-					formatActivityLink(interaction, localizedText, activity, index)
+					formatActivityLink({ interaction, locale, activity, index })
 				);
 
 				if (activities.length === 0) {
 					responseEmbed = {
 						description: mustache.render(
-							localizedText.commands.activity.searchActivity.noActivities,
+							locale.commands.activity.searchActivity.noActivities,
 							{ warningEmoji }
 						),
 						color: defaultBotColor,
@@ -88,7 +89,7 @@ module.exports = {
 					});
 				}
 				responseEmbed = {
-					title: localizedText.commands.activity.searchActivity.title,
+					title: locale.commands.activity.searchActivity.title,
 					description: activityLinks.join('\n'),
 					color: linksColor,
 				};

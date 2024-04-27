@@ -1,4 +1,3 @@
-const mustache = require('mustache');
 const {
 	createActivityButtons,
 } = require('@functions/buttons/createActivityButtons');
@@ -9,22 +8,14 @@ const {
 	generateActivityEmbed,
 } = require('@functions/embeds/generateActivityEmbed');
 
-const editActivityMessage = async (
-	interaction,
-	database,
-	localizedText,
-	addTimestamp
-) => {
+const editActivityMessage = async (interaction, database, locale) => {
 	const isGroupNowFull =
 		database.acceptedPlayers.length === database.maxPlayersCount;
-	const components = await createActivityButtons(
-		localizedText,
-		!isGroupNowFull
-	);
+	const components = await createActivityButtons(locale, !isGroupNowFull);
 	const participantsFieldName =
-		localizedText.components.modals.newActivity.activityInfo.playersField;
+		locale.components.modals.newActivity.activityInfo.playersField;
 	const creatorIdFieldName =
-		localizedText.components.modals.newActivity.activityInfo.creatorField;
+		locale.components.modals.newActivity.activityInfo.creatorField;
 
 	const percentage =
 		(database.acceptedPlayers.length / database.maxPlayersCount) * 100;
@@ -34,28 +25,17 @@ const editActivityMessage = async (
 	const creatorUser = await interaction.client.users.fetch(database.ownerId);
 	const creatorAvatar = creatorUser.avatarURL();
 
-	let descriptionWithTimestamp = database.description;
-
-	if (addTimestamp) {
-		const deletionTimestampInSeconds = Math.floor(Date.now() / 1000) + 10;
-		descriptionWithTimestamp += ` (${mustache.render(
-			localizedText.components.buttons.activity.groupReadyToActivity
-				.deleteAfterTime,
-			{ deletionTimestampInSeconds }
-		)})`;
-	}
-
-	const embed = generateActivityEmbed(
-		database.name,
-		descriptionWithTimestamp,
-		database.ownerId,
-		database.acceptedPlayers,
-		database.maxPlayersCount,
-		creatorIdFieldName,
-		participantsFieldName,
-		colorActivity,
-		creatorAvatar
-	);
+	const embed = generateActivityEmbed({
+		title: database.name,
+		description: database.description,
+		creatorId: database.ownerId,
+		participants: database.acceptedPlayers,
+		maxPlayers: database.maxPlayersCount,
+		creatorFieldName: creatorIdFieldName,
+		participantsFieldName: participantsFieldName,
+		embedColor: colorActivity,
+		ownerAvatarUrl: creatorAvatar,
+	});
 
 	await interaction.message.edit({
 		embeds: [embed],

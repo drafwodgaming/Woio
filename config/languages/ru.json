@@ -24,7 +24,7 @@
 			"description": "Настроить язык для сервера",
 			"setLanguage": "Установить язык для сервера",
 			"chooseLanguage": "Выбрать язык",
-			"languageUpdated": "{{{flag}}} Язык установлен на {{language}}"
+			"languageUpdated": "{{{flag}}} **Язык установлен на {{language}}**"
 		},
 		"serverInfo": {
 			"title": "Информация о сервере",
@@ -68,30 +68,30 @@
 			"dnd": "{{dndEmoji}} Не беспокоить"
 		},
 		"welcomeChannel": {
-			"editedChannel": "Канал для приветствия изменён на <#{{channelId}}>",
-			"installedChannel": "Канал для приветствия установлен на <#{{channelId}}>. Для отключения введите /welcomechannel disable",
+			"editedChannel": "**Канал для приветствия изменён на <#{{channelId}}>**",
+			"installedChannel": "**Канал для приветствия установлен на <#{{channelId}}>. Для отключения введите /welcomechannel disable**",
 			"noChannel": "{{{warningEmoji}}} **Канал для приветствия ещё не установлен**",
-			"deletedChannel": "Канал для приветствия удалён",
+			"deletedChannel": "**Канал для приветствия удалён**",
 			"selectChannel": "Выберать канал для приветственных сообщений",
 			"setupChannel": "Установить канал для приветственных сообщений",
 			"disableChannel": "Отключить теканал для приветственных сообщений",
 			"channelOption": "Установить канал для приветственных сообщений"
 		},
 		"leaveChannel": {
-			"editedChannel": "Канал для прощания изменен на <#{{channelId}}>",
-			"installedChannel": "Канал для прощания установлен на <#{{channelId}}>. Для отключения введите /leavechannel disable",
+			"editedChannel": "**Канал для прощания изменен на <#{{channelId}}>**",
+			"installedChannel": "**Канал для прощания установлен на <#{{channelId}}>. Для отключения введите /leavechannel disable**",
 			"noChannel": "{{{warningEmoji}}} **Канал для прощания ещё не установлен**",
-			"deletedChannel": "Канал для прощания удалён",
+			"deletedChannel": "**Канал для прощания удалён**",
 			"selectChannel": "Выберите канал для прощальных сообщений",
 			"setupChannel": "Установить  канал для прощальных сообщений",
 			"disableChannel": "Отключить канал для прощальных сообщений",
 			"channelOption": "Установить канал для прощальных сообщений"
 		},
 		"joinToCreateChannel": {
-			"editedChannel": "Канал \"Join To Create\" изменён на <#{{channelId}}>",
-			"installedChannel": "Канал \"Join To Create\" установлен на <#{{channelId}}>. Для отключения введите /jointocreate disable",
+			"editedChannel": "**Канал \"Join To Create\" изменён на <#{{channelId}}>**",
+			"installedChannel": "**Канал \"Join To Create\" установлен на <#{{channelId}}>. Для отключения введите /jointocreate disable**",
 			"noChannel": "{{{warningEmoji}}} **Канал \"Join To Create\" ещё не установлен**",
-			"deletedChannel": "Канал \"Join To Create\" удалён",
+			"deletedChannel": "**Канал \"Join To Create\" удалён**",
 			"selectChannel": "Выберите канал \"Join To Create\"",
 			"setupChannel": "Настроить канал \"Join To Create\"",
 			"disableChannel": "Отключить канал \"Join To Create\"",
@@ -105,7 +105,7 @@
 			"suggestionTitle": "{{{suggestion}}} | Предложение",
 			"otherTitle": "{{{other}}} | Другое",
 			"reportBy": "Репорт отправил {{user}} (Сервер: {{guild}})",
-			"succesSendReport": "Репорт успешно отправлен",
+			"succesSendReport": "**Репорт успешно отправлен**",
 			"fields": {
 				"description": "Описание"
 			},
@@ -216,9 +216,7 @@
 			"tempVoiceChannelTitle": "Временный голосовой канал"
 		}
 	},
-	"other": {
-		"loading": "{{{loadingEmoji}}} | Загрузка"
-	},
+
 	"logs": {
 		"errors": {
 			"errorCallCommand": "There was an error while executing this command! If this error continues, please contact us!"

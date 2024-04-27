@@ -1,42 +1,38 @@
-const {
-	SlashCommandBuilder,
-	PermissionFlagsBits,
-	ChatInputCommandInteraction,
-} = require('discord.js');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const mustache = require('mustache');
-
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const { getLanguageName } = require('@functions/utils/general/getLanguageName');
 const { getLanguageFlag } = require('@functions/utils/general/getLanguageFlag');
 
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.language.name)
-		.setDescription(en.commands.language.description)
+		.setName(enCommands.language.name)
+		.setDescription(enCommands.language.description)
 		.setDescriptionLocalizations({
-			ru: ru.commands.language.description,
-			uk: uk.commands.language.description,
+			ru: ruCommands.language.description,
+			uk: ukCommands.language.description,
 		})
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName(en.commands.subcommands.setLanguage)
-				.setDescription(en.commands.language.setLanguage)
+				.setName(enCommands.subcommands.setLanguage)
+				.setDescription(enCommands.language.setLanguage)
 				.setDescriptionLocalizations({
-					ru: ru.commands.language.setLanguage,
-					uk: uk.commands.language.setLanguage,
+					ru: ruCommands.language.setLanguage,
+					uk: ukCommands.language.setLanguage,
 				})
 				.addStringOption(option =>
 					option
-						.setName(en.commands.options.languageOption)
-						.setDescription(en.commands.language.chooseLanguage)
+						.setName(enCommands.options.languageOption)
+						.setDescription(enCommands.language.chooseLanguage)
 						.setDescriptionLocalizations({
-							ru: ru.commands.language.chooseLanguage,
-							uk: uk.commands.language.chooseLanguage,
+							ru: ruCommands.language.chooseLanguage,
+							uk: ukCommands.language.chooseLanguage,
 						})
 						.setRequired(true)
 						.addChoices(
@@ -47,20 +43,14 @@ module.exports = {
 				)
 		)
 		.setDMPermission(false),
-
-	/**
-	 * Sets the language of a guild.
-	 * @param {ChatInputCommandInteraction} interaction - The interaction instance.
-	 */
 	async execute(interaction) {
 		const { guild, options } = interaction;
 		const subCommand = options.getSubcommand();
-		const selectedLocale = options.getString(
-			en.commands.options.languageOption
-		);
+
+		const selectedLocale = options.getString(enCommands.options.languageOption);
 		const guildId = guild.id;
 
-		if (subCommand !== en.commands.subcommands.setLanguage) return;
+		if (subCommand !== enCommands.subcommands.setLanguage) return;
 
 		const localeSchema = interaction.client.models.get('serverLocale');
 		await localeSchema.updateOne(
@@ -69,12 +59,12 @@ module.exports = {
 			{ upsert: true }
 		);
 
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 		const languageName = getLanguageName(selectedLocale);
 		const languageFlag = getLanguageFlag(selectedLocale);
 
 		const responseContent = mustache.render(
-			localizedText.commands.language.languageUpdated,
+			locale.commands.language.languageUpdated,
 			{ flag: languageFlag, language: languageName }
 		);
 

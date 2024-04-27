@@ -4,39 +4,39 @@ const {
 	PermissionFlagsBits,
 } = require('discord.js');
 const { getColor } = require('@functions/utils/general/getColor');
-
-const emojis = require('@config/emojis.json');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
+const { warning } = require('@config/emojis.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const mustache = require('mustache');
 
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.joinToCreateChannel.name)
-		.setDescription(en.commands.joinToCreateChannel.selectChannel)
+		.setName(enCommands.joinToCreateChannel.name)
+		.setDescription(enCommands.joinToCreateChannel.selectChannel)
 		.setDescriptionLocalizations({
-			ru: ru.commands.joinToCreateChannel.selectChannel,
-			uk: uk.commands.joinToCreateChannel.selectChannel,
+			ru: ruCommands.joinToCreateChannel.selectChannel,
+			uk: ukCommands.joinToCreateChannel.selectChannel,
 		})
 		.setDMPermission(false)
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName(en.commands.subcommands.setup)
-				.setDescription(en.commands.joinToCreateChannel.setupChannel)
+				.setName(enCommands.subcommands.setup)
+				.setDescription(enCommands.joinToCreateChannel.setupChannel)
 				.setDescriptionLocalizations({
-					ru: ru.commands.joinToCreateChannel.setupChannel,
-					uk: uk.commands.joinToCreateChannel.setupChannel,
+					ru: ruCommands.joinToCreateChannel.setupChannel,
+					uk: ukCommands.joinToCreateChannel.setupChannel,
 				})
 				.addChannelOption(option =>
 					option
-						.setName(en.commands.options.channelOption)
-						.setDescription(en.commands.joinToCreateChannel.channelOption)
+						.setName(enCommands.options.channelOption)
+						.setDescription(enCommands.joinToCreateChannel.channelOption)
 						.setDescriptionLocalizations({
-							ru: ru.commands.joinToCreateChannel.channelOption,
-							uk: uk.commands.joinToCreateChannel.channelOption,
+							ru: ruCommands.joinToCreateChannel.channelOption,
+							uk: ukCommands.joinToCreateChannel.channelOption,
 						})
 						.addChannelTypes(ChannelType.GuildVoice)
 						.setRequired(true)
@@ -44,38 +44,35 @@ module.exports = {
 		)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName(en.commands.subcommands.disable)
-				.setDescription(en.commands.joinToCreateChannel.disableChannel)
+				.setName(enCommands.subcommands.disable)
+				.setDescription(enCommands.joinToCreateChannel.disableChannel)
 				.setDescriptionLocalizations({
-					ru: ru.commands.joinToCreateChannel.disableChannel,
-					uk: uk.commands.joinToCreateChannel.disableChannel,
+					ru: ruCommands.joinToCreateChannel.disableChannel,
+					uk: ukCommands.joinToCreateChannel.disableChannel,
 				})
 		)
 		.setDMPermission(false),
-
 	async execute(interaction) {
-		const { guild, options } = interaction;
-		const localizedText = await getLocalizedText(interaction);
+		const { guild, options, client } = interaction;
 		const subCommand = options.getSubcommand();
-		const { defaultBotColor, installGreenColor, editBlueColor, errorRedColor } =
-			{
-				defaultBotColor: getColor('default'),
-				installGreenColor: getColor('succesGreen'),
-				editBlueColor: getColor('editBlue'),
-				errorRedColor: getColor('errorRed'),
-			};
-		const warningEmoji = emojis.warning;
+		const { id: guildId } = guild;
 
-		const joinToCreateSchema = interaction.client.models.get('joinToCreate');
+		const locale = await getLocalizedText(interaction);
 
-		const guildId = guild.id;
-		const channelOption = options.getChannel(en.commands.options.channelOption);
+		const defaultBotColor = getColor('default');
+		const installGreenColor = getColor('succesGreen');
+		const editBlueColor = getColor('editBlue');
+		const errorRedColor = getColor('errorRed');
+
+		const joinToCreateSchema = client.models.get('joinToCreate');
+
+		const channelOption = options.getChannel(enCommands.options.channelOption);
 
 		let responseEmbed;
 		let description;
 
 		switch (subCommand) {
-			case en.commands.subcommands.setup:
+			case enCommands.subcommands.setup:
 				const updateData = await joinToCreateSchema.findOneAndUpdate(
 					{ guildId },
 					{ $set: { channelId: channelOption.id } },
@@ -83,31 +80,28 @@ module.exports = {
 				);
 
 				description = updateData
-					? mustache.render(
-							localizedText.commands.joinToCreateChannel.editedChannel,
-							{ channelId: channelOption.id }
-					  )
+					? mustache.render(locale.commands.joinToCreateChannel.editedChannel, {
+							channelId: channelOption.id,
+					  })
 					: mustache.render(
-							localizedText.commands.joinToCreateChannel.installedChannel,
+							locale.commands.joinToCreateChannel.installedChannel,
 							{ channelId: channelOption.id }
 					  );
+
 				responseEmbed = {
 					color: updateData ? editBlueColor : installGreenColor,
 					description,
 				};
 				break;
-			case en.commands.subcommands.disable:
+			case enCommands.subcommands.disable:
 				const deletedData = await joinToCreateSchema.findOneAndDelete({
 					guildId,
 				});
 				description = deletedData
-					? mustache.render(
-							localizedText.commands.joinToCreateChannel.deletedChannel
-					  )
-					: mustache.render(
-							localizedText.commands.joinToCreateChannel.noChannel,
-							{ warningEmoji }
-					  );
+					? mustache.render(locale.commands.joinToCreateChannel.deletedChannel)
+					: mustache.render(locale.commands.joinToCreateChannel.noChannel, {
+							warningEmoji: warning,
+					  });
 				responseEmbed = {
 					color: deletedData ? errorRedColor : defaultBotColor,
 					description,

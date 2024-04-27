@@ -6,44 +6,38 @@ const {
 } = require('discord.js');
 const { modals } = require('@config/componentsId.json');
 
-async function createNewActivityModal(localization, roles) {
+async function createNewActivityModal(locale, roles) {
 	const componentsData = [
 		{
 			id: modals.activityTitle,
-			label:
-				localization.components.modals.newActivity.activityTitleInput.label,
+			label: locale.components.modals.newActivity.activityTitleInput.label,
 			style: TextInputStyle.Short,
 			placeholder:
-				localization.components.modals.newActivity.activityTitleInput
-					.placeholder,
+				locale.components.modals.newActivity.activityTitleInput.placeholder,
 			minLength: 1,
 			maxLength: 50,
 		},
 		{
 			id: modals.activityDescription,
-			label:
-				localization.components.modals.newActivity.activityDescription.label,
+			label: locale.components.modals.newActivity.activityDescription.label,
 			style: TextInputStyle.Paragraph,
 			placeholder:
-				localization.components.modals.newActivity.activityDescription
-					.placeholder,
+				locale.components.modals.newActivity.activityDescription.placeholder,
 			minLength: 1,
 			maxLength: 1000,
 		},
 		{
 			id: modals.activityPlayersCount,
-			label:
-				localization.components.modals.newActivity.activityPlayersCount.label,
+			label: locale.components.modals.newActivity.activityPlayersCount.label,
 			style: TextInputStyle.Short,
 			placeholder:
-				localization.components.modals.newActivity.activityPlayersCount
-					.placeholder,
+				locale.components.modals.newActivity.activityPlayersCount.placeholder,
 			minLength: 1,
 			maxLength: 1,
 		},
 		{
 			id: modals.roleId,
-			label: localization.components.modals.newActivity.activityPingRole.label,
+			label: locale.components.modals.newActivity.activityPingRole.label,
 			style: TextInputStyle.Short,
 			placeholder: '',
 			minLength: 1,
@@ -54,7 +48,7 @@ async function createNewActivityModal(localization, roles) {
 
 	const newActivityModal = new ModalBuilder()
 		.setCustomId(modals.newActivity)
-		.setTitle(localization.components.modals.newActivity.title);
+		.setTitle(locale.components.modals.newActivity.title);
 
 	componentsData.forEach(
 		({ id, label, style, placeholder, minLength, maxLength, value }) => {

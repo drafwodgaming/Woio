@@ -32,9 +32,9 @@ module.exports = {
 
 		if (interactionChannelId === newState.channelId) {
 			const parentCategory = newState.channel?.parent;
-			const localizedText = await getLocalizedText(member);
+			const locale = await getLocalizedText(member);
 			const channelName = mustache.render(
-				localizedText.events.joinToCreate.channelName,
+				locale.events.joinToCreate.channelName,
 				{ username }
 			);
 
@@ -66,10 +66,10 @@ module.exports = {
 						embeds: [
 							{
 								color: defaultBotColor,
-								title: localizedText.events.joinToCreate.tempVoiceChannelTitle,
+								title: locale.events.joinToCreate.tempVoiceChannelTitle,
 							},
 						],
-						components: [await createTempChannelSettings(localizedText)],
+						components: [await createTempChannelSettings(locale)],
 					};
 
 					await createdVoiceChannel.send(embedMessage);

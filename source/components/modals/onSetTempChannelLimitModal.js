@@ -13,12 +13,11 @@ module.exports = {
 		const temporaryChannelsSchema =
 			interaction.client.models.get('temporaryChannels');
 
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 
 		if (isNaN(newUserLimit) || newUserLimit < 0 || newUserLimit > 99) {
 			return await interaction.followUp({
-				content:
-					localizedText.components.modals.setLimitTempChannel.errorInvalidLimit,
+				content: locale.components.modals.setLimitTempChannel.errorInvalidLimit,
 				ephemeral: true,
 			});
 		}
@@ -39,8 +38,7 @@ module.exports = {
 		}
 
 		await interaction.followUp({
-			content:
-				localizedText.components.modals.setLimitTempChannel.successMessage,
+			content: locale.components.modals.setLimitTempChannel.successMessage,
 			ephemeral: true,
 		});
 	},

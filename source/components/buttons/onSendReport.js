@@ -9,7 +9,7 @@ module.exports = {
 	async execute(interaction, client) {
 		const { message } = interaction;
 		const successColor = getColor('succesGreen');
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 
 		if (message) {
 			const copiedContent = {
@@ -21,7 +21,7 @@ module.exports = {
 
 			const embed = {
 				color: successColor,
-				description: localizedText.commands.report.succesSendReport,
+				description: locale.commands.report.succesSendReport,
 			};
 			await interaction.reply({ embeds: [embed], ephemeral: true });
 			await reportChannel.send(copiedContent);

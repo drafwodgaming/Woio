@@ -17,7 +17,7 @@ module.exports = {
 		const temporaryChannelsSchema =
 			interaction.client.models.get('temporaryChannels');
 
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 		const existingChannel = await temporaryChannelsSchema.findOne({
 			guildId,
 			creatorId: memberId,
@@ -40,8 +40,7 @@ module.exports = {
 		if (existingChannel && existingChannel.renameTime > Date.now()) {
 			return await interaction.followUp({
 				content:
-					localizedText.components.modals.setNameTempChannel
-						.renameCooldownMessage,
+					locale.components.modals.setNameTempChannel.renameCooldownMessage,
 				ephemeral: true,
 			});
 		}
@@ -54,8 +53,7 @@ module.exports = {
 		}
 
 		await interaction.followUp({
-			content:
-				localizedText.components.modals.setNameTempChannel.successMessage,
+			content: locale.components.modals.setNameTempChannel.successMessage,
 			ephemeral: true,
 		});
 	},

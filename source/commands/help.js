@@ -1,33 +1,34 @@
 const { SlashCommandBuilder, bold } = require('discord.js');
 const { getColor } = require('@functions/utils/general/getColor');
-const en = require('@config/languages/en.json');
-const ru = require('@config/languages/ru.json');
-const uk = require('@config/languages/uk.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
+
+const { commands: enCommands } = require('@config/languages/en.json');
+const { commands: ruCommands } = require('@config/languages/ru.json');
+const { commands: ukCommands } = require('@config/languages/uk.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName(en.commands.help.name)
-		.setDescription(en.commands.help.description)
+		.setName(enCommands.help.name)
+		.setDescription(enCommands.help.description)
 		.setDescriptionLocalizations({
-			ru: ru.commands.help.description,
-			uk: uk.commands.help.description,
+			ru: ruCommands.help.description,
+			uk: ukCommands.help.description,
 		})
 		.setDMPermission(false),
 	async execute(interaction, client) {
-		const localizedHelpText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 		const defaultColor = getColor('default');
 
 		const embed = {
 			color: defaultColor,
-			title: localizedHelpText.commands.help.title,
+			title: locale.commands.help.title,
 		};
 
-		const descArr = [];
-		for (const { name, description } of client.commandsArray) {
-			descArr.push(`${bold(name)}\n${description}\n`);
-		}
-		embed.description = descArr.join('');
+		const description = client.commandsArray.map(
+			({ name, description }) => `${bold(name)}\n${description}\n`
+		);
+
+		embed.description = description.join('');
 
 		await interaction.reply({ embeds: [embed], ephemeral: true });
 	},

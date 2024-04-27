@@ -9,52 +9,50 @@ module.exports = {
 		name: buttons.joinToActivity,
 	},
 	async execute(interaction) {
-		const { user, message } = interaction;
-		const localeText = await getLocalizedText(interaction);
-		const langConfig = localeText.components.buttons.activity.joinToActivity;
-		const activityModel = interaction.client.models.get('activity');
-		const activityRecord = await activityModel.findOne({
-			messageId: message.id,
-		});
+		const { user, message, client } = interaction;
+		const { id: messageId } = message;
+		const locale = await getLocalizedText(interaction);
 
-		if (!activityRecord) {
-			return interaction.reply({
-				content: langConfig.deletedActivity,
-				ephemeral: true,
-			});
-		}
+		const activitySchema = client.models.get('activity');
+		const activityRecord = await activitySchema.findOne({ messageId });
 
-		const playerId = user.id;
-		const isPlayerInGroup = activityRecord.acceptedPlayers.includes(playerId);
-		const isOwner = activityRecord.ownerId === playerId;
+		const replyEphemeral = content =>
+			interaction.reply({ content, ephemeral: true });
+
+		if (!activityRecord)
+			return replyEphemeral(
+				locale.components.buttons.activity.joinToActivity.deletedActivity
+			);
+
+		const isOwner = activityRecord.ownerId === user.id;
+		if (isOwner)
+			return replyEphemeral(
+				locale.components.buttons.activity.joinToActivity.ownerCannotJoin
+			);
+
+		const isPlayerInGroup = activityRecord.acceptedPlayers.includes(user.id);
+		if (isPlayerInGroup)
+			return replyEphemeral(
+				locale.components.buttons.activity.joinToActivity.alreadyInGroup
+			);
+
 		const isGroupFull =
 			activityRecord.acceptedPlayers.length === activityRecord.maxPlayersCount;
+		if (isGroupFull)
+			return replyEphemeral(
+				locale.components.buttons.activity.joinToActivity.groupFull
+			);
 
-		if (isPlayerInGroup || isOwner) {
-			const replyContent = isOwner
-				? langConfig.ownerCannotJoin
-				: langConfig.alreadyInGroup;
-			return interaction.reply({ content: replyContent, ephemeral: true });
-		}
-
-		if (isGroupFull) {
-			return interaction.reply({
-				content: langConfig.groupFull,
-				ephemeral: true,
-			});
-		}
-
-		const updatedEvent = await activityModel.findOneAndUpdate(
-			{ messageId: message.id },
-			{ $push: { acceptedPlayers: playerId } },
+		const updatedEvent = await activitySchema.findOneAndUpdate(
+			{ messageId },
+			{ $push: { acceptedPlayers: user.id } },
 			{ upsert: true, new: true }
 		);
 
-		await editActivityMessage(interaction, updatedEvent, localeText, false);
+		await editActivityMessage(interaction, updatedEvent, locale);
 
-		await interaction.reply({
-			content: langConfig.successJoinToActivity,
-			ephemeral: true,
-		});
+		await replyEphemeral(
+			locale.components.buttons.activity.joinToActivity.successJoinToActivity
+		);
 	},
 };

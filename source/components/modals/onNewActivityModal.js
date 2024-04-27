@@ -17,7 +17,7 @@ module.exports = {
 		const { activityTitle, activityDescription, activityPlayersCount, roleId } =
 			modals;
 
-		const localizedText = await getLocalizedText(interaction);
+		const locale = await getLocalizedText(interaction);
 
 		const activityData = {
 			title: fields.getTextInputValue(activityTitle),
@@ -35,7 +35,7 @@ module.exports = {
 		if (!role)
 			return interaction.reply({
 				content:
-					localizedText.components.modals.newActivity.activityPingRole
+					locale.components.modals.newActivity.activityPingRole
 						.roleNotFoundMessage,
 				ephemeral: true,
 			});
@@ -50,37 +50,37 @@ module.exports = {
 		if (isNaN(activityData.playersCount) || activityData.playersCount <= 0)
 			return interaction.reply({
 				content:
-					localizedText.components.modals.newActivity.activityPlayersCount
+					locale.components.modals.newActivity.activityPlayersCount
 						.invalidNumberMessage,
 				ephemeral: true,
 			});
 
 		const participantsFieldName =
-			localizedText.components.modals.newActivity.activityInfo.playersField;
+			locale.components.modals.newActivity.activityInfo.playersField;
 
 		const creatorId = interaction.user.id;
 		const creatorIdFieldName =
-			localizedText.components.modals.newActivity.activityInfo.creatorField;
+			locale.components.modals.newActivity.activityInfo.creatorField;
 
 		const creatorUser = await interaction.client.users.fetch(creatorId);
 		const creatorAvatar = creatorUser.avatarURL();
 
-		const embed = generateActivityEmbed(
-			activityData.title,
-			activityData.description,
-			creatorId,
-			[],
-			activityData.playersCount,
-			creatorIdFieldName,
-			participantsFieldName,
-			colorActivity,
-			creatorAvatar
-		);
+		const embed = generateActivityEmbed({
+			title: activityData.title,
+			description: activityData.description,
+			creatorId: creatorId,
+			participants: [],
+			maxPlayers: activityData.playersCount,
+			creatorFieldName: creatorIdFieldName,
+			participantsFieldName: participantsFieldName,
+			embedColor: colorActivity,
+			ownerAvatarUrl: creatorAvatar,
+		});
 
 		await interaction.reply({
 			content: pingRole,
 			embeds: [embed],
-			components: [await createActivityButtons(localizedText, true)],
+			components: [await createActivityButtons(locale, true)],
 		});
 
 		await interaction.fetchReply().then(async reply => {
