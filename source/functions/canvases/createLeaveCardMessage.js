@@ -1,38 +1,97 @@
 const { AttachmentBuilder } = require('discord.js');
 const { createCanvas, loadImage } = require('canvas');
-const { fonts, memberCard, colors } = require('@config/botConfig.json');
-const memberCardBackground = require('@config/memberBackground.json');
+const { fonts, colors } = require('@config/botConfig.json');
+const { drawRoundedRect } = require('@functions/utils/canvas/drawRoundRect');
 
+// Функция для создания изображения прощания
 const createLeaveCardMessage = async member => {
+	const { crimson, bittersweet, raisinBlack, white } = colors.canvas;
+	const { luckiestGuyRegular } = fonts;
+
 	const { user } = member;
 	const { username } = user;
 	const avatarURL = user.displayAvatarURL({ extension: 'jpg' });
-	const fontSize = 43;
-	const canvasColor = colors.canvasWhite;
 
-	const canvas = createCanvas(1024, 450);
+	const canvasWidth = 1024;
+	const canvasHeight = 450;
+	const canvas = createCanvas(canvasWidth, canvasHeight);
 	const context = canvas.getContext('2d');
-	const background = await loadImage(memberCardBackground.leave);
 
-	context.drawImage(background, 0, 0, canvas.width, canvas.height);
+	const fontSize = 43;
+	const fontFamily = luckiestGuyRegular.family;
 
-	const leaveMessage = `Goodbye ${username}!`;
-	const { width, height } = canvas;
-	const textX = width / 2;
-	const textY = height - 90;
+	const leftRectX = 118.5;
+	const leftRectY = 21;
+	const leftRectWidth = canvasWidth / 2 - leftRectX;
+	const leftRectHeight = canvasHeight * 0.75 - leftRectY;
+	const leftRectRadius = 26;
 
-	context.textAlign = 'center';
-	context.fillStyle = canvasColor;
-	context.font = `${fontSize}px ${fonts.luckiestGuyRegular.family}`;
-	context.fillText(leaveMessage, textX, textY);
+	const rightRectX = canvasWidth / 2;
+	const rightRectY = canvasHeight - leftRectHeight - 20;
+	const rightRectWidth = canvasWidth - leftRectX - rightRectX;
+	const rightRectHeight = canvasHeight * 0.75 - leftRectY;
+	const rightRectRadius = 26;
+
+	const centerRectX = canvasWidth / 2 - 364;
+	const centerRectY = canvasHeight / 2 - 179;
+	const centerRectWidth = 728;
+	const centerRectHeight = 358;
+	const centerRectRadius = 25;
+
+	const textX = canvasWidth / 2;
+	const textY = canvasHeight - 90;
 
 	const avatarRadius = 100;
-	const avatarX = width / 2;
-	const avatarY = height - 270;
+	const avatarX = canvasWidth / 2;
+	const avatarY = canvasHeight - 270;
 
+	context.fillStyle = crimson;
+	drawRoundedRect({
+		context,
+		x: leftRectX,
+		y: leftRectY,
+		width: leftRectWidth,
+		height: leftRectHeight,
+		radius: leftRectRadius,
+	});
+	context.fill();
+
+	context.fillStyle = bittersweet;
+	drawRoundedRect({
+		context,
+		x: rightRectX,
+		y: rightRectY,
+		width: rightRectWidth,
+		height: rightRectHeight,
+		radius: rightRectRadius,
+	});
+	context.fill();
+
+	// Создание центрального прямоугольника
+
+	context.fillStyle = raisinBlack;
+	drawRoundedRect({
+		context,
+		x: centerRectX,
+		y: centerRectY,
+		width: centerRectWidth,
+		height: centerRectHeight,
+		radius: centerRectRadius,
+	});
+	context.fill();
+
+	// Добавление текста прощания
+	const leaveMessage = `Goodbye ${username}!`;
+
+	context.textAlign = 'center';
+	context.fillStyle = white;
+	context.font = `${fontSize}px ${fontFamily}`;
+	context.fillText(leaveMessage, textX, textY);
+
+	// Добавление аватара пользователя
 	context.beginPath();
 	context.lineWidth = 10;
-	context.strokeStyle = colors.canvasWhite;
+	context.strokeStyle = white;
 	context.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2, true);
 	context.stroke();
 	context.clip();
@@ -46,12 +105,7 @@ const createLeaveCardMessage = async member => {
 		avatarRadius * 2
 	);
 
-	const leaveMessageAttachment = new AttachmentBuilder(
-		canvas.toBuffer('image/png'),
-		memberCard.leave
-	);
-
-	return leaveMessageAttachment;
+	return new AttachmentBuilder(canvas.toBuffer('image/png'));
 };
 
 module.exports = { createLeaveCardMessage };
