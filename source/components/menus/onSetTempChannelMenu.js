@@ -15,15 +15,16 @@ const { getLocalizedText } = require('@functions/locale/getLocale');
 module.exports = {
 	data: { name: menus.settingTempChannel },
 	async execute(interaction) {
-		const guildId = interaction.guild.id;
-		const memberId = interaction.user.id;
+		const { guild, user } = interaction;
+		const { id: guildId } = guild;
+		const { id: userId } = user;
 		const locale = await getLocalizedText(interaction);
 		const temporaryChannelsSchema =
 			interaction.client.models.get('temporaryChannels');
 
 		const existingChannel = await temporaryChannelsSchema.findOne({
 			guildId,
-			creatorId: memberId,
+			creatorId: userId,
 		});
 
 		if (!existingChannel) {

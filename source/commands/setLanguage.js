@@ -44,15 +44,15 @@ module.exports = {
 		)
 		.setDMPermission(false),
 	async execute(interaction) {
-		const { guild, options } = interaction;
+		const { guild, options, client } = interaction;
+		const { id: guildId } = guild;
 		const subCommand = options.getSubcommand();
 
 		const selectedLocale = options.getString(enCommands.options.languageOption);
-		const guildId = guild.id;
 
 		if (subCommand !== enCommands.subcommands.setLanguage) return;
 
-		const localeSchema = interaction.client.models.get('serverLocale');
+		const localeSchema = client.models.get('serverLocale');
 		await localeSchema.updateOne(
 			{ guildId },
 			{ $set: { language: selectedLocale } },

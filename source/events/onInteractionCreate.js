@@ -9,7 +9,9 @@ const { getLocalizedText } = require('@functions/locale/getLocale');
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction, client) {
-		const { customId } = interaction;
+		const { customId, user } = interaction;
+		const { id: userId } = user;
+		const { modals, buttons, selectMenus } = client;
 		const isChatInputCommand = interaction.isChatInputCommand();
 		const isModalSubmit = interaction.isModalSubmit();
 		const isButton = interaction.isButton();
@@ -27,7 +29,7 @@ module.exports = {
 
 				const developerOnlyMessage = locale.events.developerOnly;
 				const defaultBotColor = getColor('default');
-				if (command.developer && interaction.user.id !== onwerId) {
+				if (command.developer && userId !== onwerId) {
 					return interaction.reply({
 						embeds: [
 							{ color: defaultBotColor, description: developerOnlyMessage },
@@ -40,17 +42,17 @@ module.exports = {
 				break;
 
 			case isModalSubmit:
-				const modal = client.modals.get(customId);
+				const modal = modals.get(customId);
 				if (modal) await modal.execute(interaction, client);
 				break;
 
 			case isButton:
-				const button = client.buttons.get(customId);
+				const button = buttons.get(customId);
 				if (button) await button.execute(interaction, client);
 				break;
 
 			case isStringSelectMenu:
-				const selectMenu = client.selectMenus.get(customId);
+				const selectMenu = selectMenus.get(customId);
 				if (selectMenu) await selectMenu.execute(interaction, client);
 				break;
 		}

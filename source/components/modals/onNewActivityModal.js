@@ -13,7 +13,9 @@ module.exports = {
 		name: modals.newActivity,
 	},
 	async execute(interaction) {
-		const { fields } = interaction;
+		const { fields, user, guild, channel } = interaction;
+		const { roles, id: guildId, id: channelId } = guild;
+		const { id: userId } = user;
 		const { activityTitle, activityDescription, activityPlayersCount, roleId } =
 			modals;
 
@@ -29,8 +31,8 @@ module.exports = {
 			role: fields.getTextInputValue(roleId).trim(),
 		};
 
-		await interaction.guild.roles.fetch();
-		const role = interaction.guild.roles.cache.get(activityData.role);
+		await roles.fetch();
+		const role = roles.cache.get(activityData.role);
 
 		if (!role)
 			return interaction.reply({
@@ -40,10 +42,7 @@ module.exports = {
 				ephemeral: true,
 			});
 
-		const pingRole =
-			role.name === '@everyone' || role.name === '@here'
-				? role.name
-				: `<@&${role.id}>`;
+		const pingRole = role.toString();
 
 		const colorActivity = getColor('activity.redColor');
 
@@ -86,15 +85,15 @@ module.exports = {
 		await interaction.fetchReply().then(async reply => {
 			const activityModel = interaction.client.models.get('activity');
 			await activityModel.findOneAndUpdate(
-				{ ownerId: interaction.user.id },
+				{ ownerId: userId },
 				{
 					$set: {
 						name: activityData.title,
 						description: activityData.description,
 						maxPlayersCount: activityData.playersCount,
 						messageId: reply.id,
-						guildId: interaction.guild.id,
-						channelId: interaction.channel.id,
+						guildId,
+						channelId,
 						roleId: role.id,
 					},
 				},

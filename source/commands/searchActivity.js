@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const {
 	createNewActivityModal,
 } = require('@functions/modals/createNewActivityModal');
-const emojis = require('@config/emojis.json');
+const { warning } = require('@config/emojis.json');
 const {
 	formatActivityLink,
 } = require('@functions/formatter/formatActivityLink');
@@ -52,13 +52,14 @@ module.exports = {
 				})
 		),
 	async execute(interaction) {
-		const subCommand = interaction.options.getSubcommand();
+		const { options, client, guild } = interaction;
+		const { id: guildId } = guild;
+		const subCommand = options.getSubcommand();
 		const locale = await getLocalizedText(interaction);
-		const roleId = interaction.options.getRole(enCommands.options.roleOption);
+		const roleId = options.getRole(enCommands.options.roleOption);
 
 		const linksColor = getColor('linksBlue');
 		const defaultBotColor = getColor('default');
-		const warningEmoji = emojis.warning;
 		let responseEmbed;
 
 		switch (subCommand) {
@@ -67,10 +68,8 @@ module.exports = {
 				return await interaction.showModal(modal);
 
 			case enCommands.subcommands.searchActivity:
-				const activitySchema = interaction.client.models.get('activity');
-				const activities = await activitySchema.find({
-					guildId: interaction.guildId,
-				});
+				const activitySchema = client.models.get('activity');
+				const activities = await activitySchema.find({ guildId });
 				const activityLinks = activities.map((activity, index) =>
 					formatActivityLink({ interaction, locale, activity, index })
 				);
@@ -79,7 +78,7 @@ module.exports = {
 					responseEmbed = {
 						description: mustache.render(
 							locale.commands.activity.searchActivity.noActivities,
-							{ warningEmoji }
+							{ warningEmoji: warning }
 						),
 						color: defaultBotColor,
 					};

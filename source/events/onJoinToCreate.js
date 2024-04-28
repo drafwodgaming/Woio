@@ -16,7 +16,7 @@ module.exports = {
 		const { member } = oldState || newState;
 		const { guild, user, client } = member;
 		const { id: guildId } = guild;
-		const username = user.username;
+		const { username } = user;
 
 		const joinToCreateSchema = client.models.get('joinToCreate');
 		const joinToCreateData = await joinToCreateSchema.findOne({

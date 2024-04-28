@@ -13,6 +13,7 @@ module.exports = {
 	async execute(interaction) {
 		const { user, message, client } = interaction;
 		const { id: messageId } = message;
+		const { id: userId } = user;
 		const locale = await getLocalizedText(interaction);
 
 		const activitySchema = client.models.get('activity');
@@ -21,7 +22,7 @@ module.exports = {
 		const replyEphemeral = content =>
 			interaction.reply({ content, ephemeral: true });
 
-		const isOwner = activityRecord.ownerId === user.id;
+		const isOwner = activityRecord.ownerId === userId;
 		if (!isOwner)
 			return replyEphemeral(
 				locale.components.buttons.activity.groupReadyToActivity.ownerOnly
@@ -35,14 +36,14 @@ module.exports = {
 
 		const deleteMessagePromise = message.delete();
 		const deleteActivityPromise = activitySchema.findOneAndDelete({
-			messageId: message.id,
+			messageId,
 		});
-		const replyPromise = replyEphemeral(
-			mustache.render(
+		const replyPromise = interaction.reply({
+			content: mustache.render(
 				locale.components.buttons.activity.groupReadyToActivity.pingPlayers,
 				{ acceptedPlayers }
-			)
-		);
+			),
+		});
 
 		await Promise.all([
 			deleteMessagePromise,

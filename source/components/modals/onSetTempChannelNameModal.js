@@ -28,12 +28,7 @@ module.exports = {
 
 		const updatedChannel = await temporaryChannelsSchema.findOneAndUpdate(
 			{ guildId, creatorId: memberId },
-			{
-				$set: {
-					channelName: newChannelName,
-					renameTime: futureTime,
-				},
-			},
+			{ $set: { channelName: newChannelName, renameTime: futureTime } },
 			{ upsert: true }
 		);
 

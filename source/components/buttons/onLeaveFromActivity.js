@@ -11,6 +11,7 @@ module.exports = {
 	async execute(interaction) {
 		const { user, message, client } = interaction;
 		const { id: messageId } = message;
+		const { id: userId } = user;
 		const locale = await getLocalizedText(interaction);
 		const activityModel = client.models.get('activity');
 
@@ -24,14 +25,13 @@ module.exports = {
 				locale.components.buttons.activity.leaveFromActivity.deletedActivity
 			);
 
-		const isOwner = activityRecord.ownerId === user.id;
+		const isOwner = activityRecord.ownerId === userId;
 		if (isOwner)
 			return replyEphemeral(
 				locale.components.buttons.activity.leaveFromActivity.ownerCannotLeave
 			);
 
-		const isPlayerInGroup = activityRecord.acceptedPlayers.includes(user.id);
-		user.id;
+		const isPlayerInGroup = activityRecord.acceptedPlayers.includes(userId);
 		if (!isPlayerInGroup)
 			return replyEphemeral(
 				locale.components.buttons.activity.leaveFromActivity.noInGroup
@@ -39,7 +39,7 @@ module.exports = {
 
 		const updatedEvent = await activityModel.findOneAndUpdate(
 			{ messageId },
-			{ $pull: { acceptedPlayers: user.id } },
+			{ $pull: { acceptedPlayers: userId } },
 			{ upsert: true, new: true }
 		);
 

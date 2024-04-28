@@ -6,12 +6,14 @@ module.exports = {
 		name: modals.tempChannelLimit,
 	},
 	async execute(interaction) {
+		const { client, guild, user } = interaction;
+		const { id: guildId } = guild;
+		const { id: memberId } = user;
 		await interaction.deferUpdate();
 		const newUserLimit = parseInt(
 			interaction.fields.getTextInputValue(modals.tempChannelLimitInput)
 		);
-		const temporaryChannelsSchema =
-			interaction.client.models.get('temporaryChannels');
+		const temporaryChannelsSchema = client.models.get('temporaryChannels');
 
 		const locale = await getLocalizedText(interaction);
 
@@ -21,8 +23,6 @@ module.exports = {
 				ephemeral: true,
 			});
 		}
-		const guildId = interaction.guild.id;
-		const memberId = interaction.user.id;
 
 		const updatedChannel = await temporaryChannelsSchema.findOneAndUpdate(
 			{ guildId, creatorId: memberId },
@@ -31,9 +31,7 @@ module.exports = {
 		);
 
 		if (updatedChannel) {
-			const voiceChannel = interaction.guild.channels.cache.get(
-				updatedChannel.channelId
-			);
+			const voiceChannel = guild.channels.cache.get(updatedChannel.channelId);
 			if (voiceChannel) await voiceChannel.setUserLimit(newUserLimit);
 		}
 
