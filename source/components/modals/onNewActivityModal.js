@@ -14,7 +14,8 @@ module.exports = {
 	},
 	async execute(interaction) {
 		const { fields, user, guild, channel } = interaction;
-		const { roles, id: guildId, id: channelId } = guild;
+		const { roles, id: guildId } = guild;
+		const { id: channelId } = channel;
 		const { id: userId } = user;
 		const { activityTitle, activityDescription, activityPlayersCount, roleId } =
 			modals;

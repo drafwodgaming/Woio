@@ -1,26 +1,25 @@
 const unlockChannel = async (interaction, schema, locale) => {
+	await interaction.deferUpdate();
+
 	const { guild, user } = interaction;
 	const { id: guildId, roles: { everyone: everyoneRole } = {} } = guild;
 	const { id: creatorId } = user;
 
 	const update = { $set: { isLocked: false } };
 
-	await Promise.all([
-		await schema.findOneAndUpdate({ guildId, creatorId }, update, {
-			upsert: true,
-		}),
-		interaction.deferUpdate(),
-	]);
+	const updatedChannel = await schema.findOneAndUpdate(
+		{ guildId, creatorId },
+		{ $set: { isLocked: false } },
+		{ upsert: true }
+	);
 
 	const successMessage =
 		locale?.components?.menus?.tempChannel?.unlockChannel?.successUnlock;
 	if (successMessage)
 		await interaction.followUp({ content: successMessage, ephemeral: true });
 
-	const channel = await schema.findOne({ guildId, creatorId });
-
-	if (channel) {
-		const { channelId } = channel;
+	if (updatedChannel) {
+		const { channelId } = updatedChannel;
 		const voiceChannel = guild.channels.cache.get(channelId);
 
 		if (voiceChannel)

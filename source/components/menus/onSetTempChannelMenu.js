@@ -15,7 +15,7 @@ const { getLocalizedText } = require('@functions/locale/getLocale');
 module.exports = {
 	data: { name: menus.settingTempChannel },
 	async execute(interaction) {
-		const { guild, user } = interaction;
+		const { guild, user, message } = interaction;
 		const { id: guildId } = guild;
 		const { id: userId } = user;
 		const locale = await getLocalizedText(interaction);
@@ -27,17 +27,18 @@ module.exports = {
 			creatorId: userId,
 		});
 
-		if (!existingChannel) {
-			await interaction.deferUpdate();
-			await interaction.followUp({
+		const selectedValue = interaction.values[0];
+
+		if (
+			!existingChannel ||
+			(message && message.id !== existingChannel.messageId)
+		) {
+			await interaction.reply({
 				content: locale.components.menus.tempChannel.noCreate,
 				ephemeral: true,
 			});
-			await interaction.editReply({
-				components: [await settingsTempChannel(interaction)],
-			});
+			return;
 		}
-		const selectedValue = interaction.values[0];
 
 		switch (selectedValue) {
 			case menus.values.tempChannelName:

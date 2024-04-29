@@ -1,9 +1,6 @@
 const { Events } = require('discord.js');
 const { createVoiceChannel } = require('@functions/utils/createVoiceChannel');
 const {
-	deleteEmptyTempChannels,
-} = require('@functions/utils/deleteEmptyTempChannels');
-const {
 	createTempChannelSettings,
 } = require('@functions/menus/createTempChannelSettings');
 const { getColor } = require('@functions/utils/general/getColor');
@@ -18,62 +15,64 @@ module.exports = {
 		const { id: guildId } = guild;
 		const { username } = user;
 
-		const joinToCreateSchema = client.models.get('joinToCreate');
-		const joinToCreateData = await joinToCreateSchema.findOne({
-			guildId,
-		});
+		const [joinToCreateData, temporaryChannels] = await Promise.all([
+			client.models.get('joinToCreate').findOne({ guildId }),
+			client.models.get('temporaryChannels'),
+		]);
 
-		if (!joinToCreateData) return;
-
-		const temporaryChannels = client.models.get('temporaryChannels');
 		const interactionChannelId = joinToCreateData.channelId;
 
-		await deleteEmptyTempChannels(guild);
+		if (!joinToCreateData || interactionChannelId !== newState.channelId)
+			return;
 
-		if (interactionChannelId === newState.channelId) {
-			const parentCategory = newState.channel?.parent;
-			const locale = await getLocalizedText(member);
-			const channelName = mustache.render(
-				locale.events.joinToCreate.channelName,
-				{ username }
+		const parentCategory = newState.channel?.parent;
+		const locale = await getLocalizedText(member);
+		const channelName = mustache.render(
+			locale.events.joinToCreate.channelName,
+			{ username }
+		);
+
+		const existingChannel = await temporaryChannels.findOne({
+			guildId,
+			channelId: newState.channelId,
+		});
+
+		if (!existingChannel) {
+			const createdVoiceChannel = await createVoiceChannel(
+				member.guild,
+				member,
+				channelName,
+				0,
+				parentCategory
 			);
 
-			const existingChannel = await temporaryChannels.findOne({
-				guildId,
-				channelId: newState.channelId,
-			});
+			if (createdVoiceChannel) {
+				newState.setChannel(createdVoiceChannel);
 
-			if (!existingChannel) {
-				const createdVoiceChannel = await createVoiceChannel(
-					member.guild,
-					member,
-					channelName,
-					0,
-					parentCategory
+				const defaultBotColor = getColor('default');
+				const embedMessage = {
+					embeds: [
+						{
+							color: defaultBotColor,
+							title: locale.events.joinToCreate.tempVoiceChannelTitle,
+						},
+					],
+					components: [await createTempChannelSettings(locale)],
+				};
+
+				const createdMessage = await createdVoiceChannel.send(embedMessage);
+
+				await temporaryChannels.findOneAndUpdate(
+					{ guildId, channelId: createdVoiceChannel.id },
+					{
+						$set: {
+							creatorId: member.id,
+							channelName,
+							messageId: createdMessage.id,
+						},
+					},
+					{ upsert: true }
 				);
-
-				if (createdVoiceChannel && newState) {
-					newState.setChannel(createdVoiceChannel);
-
-					await temporaryChannels.findOneAndUpdate(
-						{ guildId, channelId: createdVoiceChannel.id },
-						{ $set: { creatorId: member.id, channelName } },
-						{ upsert: true }
-					);
-
-					const defaultBotColor = getColor('default');
-					const embedMessage = {
-						embeds: [
-							{
-								color: defaultBotColor,
-								title: locale.events.joinToCreate.tempVoiceChannelTitle,
-							},
-						],
-						components: [await createTempChannelSettings(locale)],
-					};
-
-					await createdVoiceChannel.send(embedMessage);
-				}
 			}
 		}
 	},
