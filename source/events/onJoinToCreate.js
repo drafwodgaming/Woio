@@ -20,10 +20,11 @@ module.exports = {
 			client.models.get('temporaryChannels'),
 		]);
 
+		if (!joinToCreateData) return;
+
 		const interactionChannelId = joinToCreateData.channelId;
 
-		if (!joinToCreateData || interactionChannelId !== newState.channelId)
-			return;
+		if (interactionChannelId !== newState.channelId) return;
 
 		const parentCategory = newState.channel?.parent;
 		const locale = await getLocalizedText(member);
