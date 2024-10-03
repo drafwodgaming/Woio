@@ -1,12 +1,12 @@
 const { menus } = require('@config/componentsId.json');
 const {
-	createTempChannelNameModal,
+	createTempChannelNameModal
 } = require('@functions/modals/createTempChannelNameModal');
 const {
-	createTempChannelLimitModal,
+	createTempChannelLimitModal
 } = require('@functions/modals/createTempChannelLimitModal');
 const {
-	createTempChannelSettings,
+	createTempChannelSettings
 } = require('@functions/menus/createTempChannelSettings');
 const { lockChannel } = require('@functions/utils/JTCSystem/lockChannel');
 const { unlockChannel } = require('@functions/utils/JTCSystem/unlockChannel');
@@ -24,10 +24,8 @@ module.exports = {
 
 		const existingChannel = await temporaryChannelsSchema.findOne({
 			guildId,
-			creatorId: userId,
+			creatorId: userId
 		});
-
-		const selectedValue = interaction.values[0];
 
 		if (
 			!existingChannel ||
@@ -35,28 +33,26 @@ module.exports = {
 		) {
 			await interaction.reply({
 				content: locale.components.menus.tempChannel.noCreate,
-				ephemeral: true,
+				ephemeral: true
 			});
 			return;
 		}
 
-		switch (selectedValue) {
-			case menus.values.tempChannelName:
-				await interaction.showModal(await createTempChannelNameModal(locale));
-				break;
-			case menus.values.tempChannelLimit:
-				await interaction.showModal(await createTempChannelLimitModal(locale));
-				break;
-			case menus.values.tempChannelLock:
-				await lockChannel(interaction, temporaryChannelsSchema, locale);
-				break;
-			case menus.values.tempChannelUnlock:
-				await unlockChannel(interaction, temporaryChannelsSchema, locale);
-				break;
-		}
+		const actions = {
+			[menus.values.tempChannelName]: async () =>
+				interaction.showModal(await createTempChannelNameModal(locale)),
+			[menus.values.tempChannelLimit]: async () =>
+				interaction.showModal(await createTempChannelLimitModal(locale)),
+			[menus.values.tempChannelLock]: async () =>
+				lockChannel(interaction, temporaryChannelsSchema, locale),
+			[menus.values.tempChannelUnlock]: async () =>
+				unlockChannel(interaction, temporaryChannelsSchema, locale)
+		};
+
+		await actions[interaction.values[0]]?.();
 
 		await interaction.editReply({
-			components: [await createTempChannelSettings(locale)],
+			components: [await createTempChannelSettings(locale)]
 		});
-	},
+	}
 };

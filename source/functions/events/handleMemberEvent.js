@@ -8,20 +8,19 @@ const {
 const handleMemberEvent = async (member, eventType) => {
 	const { guild, user } = member;
 	const { channels, client } = guild;
-	const channelCache = channels.cache;
+
+	if (user.bot) return;
 
 	const channelSchema = client.models.get(`${eventType}Channel`);
-	const interactionChannelId = await channelSchema.findOne({
+	const channelData = await channelSchema.findOne({
 		guildId: guild.id,
 	});
 
-	if (!interactionChannelId) return;
+	if (!channelData) return;
 
-	const interactionChannel = channelCache.find(
-		channel => channel.id === interactionChannelId.channelId
-	);
+	const interactionChannel = channels.cache.get(channelData.channelId);
 
-	if (user.bot || !interactionChannel) return;
+	if (!interactionChannel) return;
 
 	const createMessageCanvas =
 		eventType === 'welcome' ? createWelcomeCardMessage : createLeaveCardMessage;

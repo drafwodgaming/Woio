@@ -49,24 +49,24 @@ module.exports = {
 		const { options } = interaction;
 		const locale = await getLocalizedText(interaction);
 
-		const selectedReport = options.getString(
-			enCommands.options.typeReportOption
-		);
+		const reportType = options.getString(enCommands.options.typeReportOption);
 		const description = options.getString(
 			enCommands.options.reportDescriptionOption
 		);
 
-		const embed = generateReportEmbed({
+		const reportEmbed = generateReportEmbed({
 			interaction,
 			locale,
-			type: selectedReport,
+			type: reportType,
 			description,
 		});
 
+		const reportButtons = await createReportButtons(locale);
+
 		await interaction.reply({
 			content: locale.commands.report.preview,
-			embeds: [embed],
-			components: [await createReportButtons(locale)],
+			embeds: [reportEmbed],
+			components: [reportButtons],
 			fetchReply: true,
 			ephemeral: true,
 		});

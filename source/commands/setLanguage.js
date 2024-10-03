@@ -41,36 +41,30 @@ module.exports = {
 							{ name: 'Українська', value: 'uk' }
 						)
 				)
-		)
-		.setDMPermission(false),
+		),
 	async execute(interaction) {
 		const { guild, options, client } = interaction;
-		const { id: guildId } = guild;
-		const subCommand = options.getSubcommand();
-
 		const selectedLocale = options.getString(enCommands.options.languageOption);
 
-		if (subCommand !== enCommands.subcommands.setLanguage) return;
+		if (options.getSubcommand() === enCommands.subcommands.setLanguage) {
+			await client.models
+				.get('serverLocale')
+				.updateOne(
+					{ guildId: guild.id },
+					{ $set: { language: selectedLocale } },
+					{ upsert: true }
+				);
 
-		const localeSchema = client.models.get('serverLocale');
-		await localeSchema.updateOne(
-			{ guildId },
-			{ $set: { language: selectedLocale } },
-			{ upsert: true }
-		);
+			const locale = await getLocalizedText(interaction);
+			const responseContent = mustache.render(
+				locale.commands.language.languageUpdated,
+				{
+					flag: getLanguageFlag(selectedLocale),
+					language: getLanguageName(selectedLocale),
+				}
+			);
 
-		const locale = await getLocalizedText(interaction);
-		const languageName = getLanguageName(selectedLocale);
-		const languageFlag = getLanguageFlag(selectedLocale);
-
-		const responseContent = mustache.render(
-			locale.commands.language.languageUpdated,
-			{ flag: languageFlag, language: languageName }
-		);
-
-		await interaction.reply({
-			content: responseContent,
-			ephemeral: true,
-		});
+			await interaction.reply({ content: responseContent, ephemeral: true });
+		}
 	},
 };

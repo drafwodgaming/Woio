@@ -22,13 +22,12 @@ module.exports = {
 		const embed = {
 			color: defaultColor,
 			title: locale.commands.help.title,
+			fields: client.commandsArray.map(({ name, description }) => ({
+				name: bold(name),
+				value: description,
+				inline: true,
+			})),
 		};
-
-		const description = client.commandsArray.map(
-			({ name, description }) => `${bold(name)}\n${description}\n`
-		);
-
-		embed.description = description.join('');
 
 		await interaction.reply({ embeds: [embed], ephemeral: true });
 	},

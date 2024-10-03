@@ -68,7 +68,6 @@ module.exports = {
 
 		const channelOption = options.getChannel(enCommands.options.channelOption);
 
-		let responseEmbed;
 		let description;
 
 		switch (subCommand) {
@@ -88,11 +87,12 @@ module.exports = {
 							{ channelId: channelOption.id }
 					  );
 
-				responseEmbed = {
+				const enableResponseEmbed = {
 					color: updateData ? editBlueColor : installGreenColor,
 					description,
 				};
-				break;
+				return interaction.reply({ embeds: [enableResponseEmbed] });
+
 			case enCommands.subcommands.disable:
 				const deletedData = await joinToCreateSchema.findOneAndDelete({
 					guildId,
@@ -102,12 +102,11 @@ module.exports = {
 					: mustache.render(locale.commands.joinToCreateChannel.noChannel, {
 							warningEmoji: warning,
 					  });
-				responseEmbed = {
+				const disableResponseEmbed = {
 					color: deletedData ? errorRedColor : defaultBotColor,
 					description,
 				};
-				break;
+				return interaction.reply({ embeds: [disableResponseEmbed] });
 		}
-		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
 	},
 };

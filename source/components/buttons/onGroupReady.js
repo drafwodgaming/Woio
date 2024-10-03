@@ -3,12 +3,12 @@ const { buttons } = require('@config/componentsId.json');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const mustache = require('mustache');
 const {
-	editActivityMessage,
+	editActivityMessage
 } = require('@functions/utils/activity/editActivityMessage');
 
 module.exports = {
 	data: {
-		name: buttons.groupReadyToActivity,
+		name: buttons.groupReadyToActivity
 	},
 	async execute(interaction) {
 		const { user, message, client } = interaction;
@@ -21,6 +21,11 @@ module.exports = {
 
 		const replyEphemeral = content =>
 			interaction.reply({ content, ephemeral: true });
+
+		if (!activityRecord)
+			return replyEphemeral(
+				locale.components.buttons.activity.joinToActivity.deletedActivity
+			);
 
 		const isOwner = activityRecord.ownerId === userId;
 		if (!isOwner)
@@ -36,19 +41,19 @@ module.exports = {
 
 		const deleteMessagePromise = message.delete();
 		const deleteActivityPromise = activitySchema.findOneAndDelete({
-			messageId,
+			messageId
 		});
 		const replyPromise = interaction.reply({
 			content: mustache.render(
 				locale.components.buttons.activity.groupReadyToActivity.pingPlayers,
 				{ acceptedPlayers }
-			),
+			)
 		});
 
 		await Promise.all([
 			deleteMessagePromise,
 			deleteActivityPromise,
-			replyPromise,
+			replyPromise
 		]);
-	},
+	}
 };

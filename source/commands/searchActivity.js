@@ -1,10 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
 const {
-	createNewActivityModal,
+	createNewActivityModal
 } = require('@functions/modals/createNewActivityModal');
 const { warning } = require('@config/emojis.json');
 const {
-	formatActivityLink,
+	formatActivityLink
 } = require('@functions/formatter/formatActivityLink');
 const { getLocalizedText } = require('@functions/locale/getLocale');
 const { getColor } = require('@functions/utils/general/getColor');
@@ -20,7 +20,7 @@ module.exports = {
 		.setDescription(enCommands.activity.description)
 		.setDescriptionLocalizations({
 			ru: ruCommands.activity.description,
-			uk: ukCommands.activity.description,
+			uk: ukCommands.activity.description
 		})
 		.setDMPermission(false)
 		.addSubcommand(subcommand =>
@@ -29,7 +29,7 @@ module.exports = {
 				.setDescription(enCommands.activity.newActivity.description)
 				.setDescriptionLocalizations({
 					ru: ruCommands.activity.newActivity.description,
-					uk: ukCommands.activity.newActivity.description,
+					uk: ukCommands.activity.newActivity.description
 				})
 				.addRoleOption(option =>
 					option
@@ -37,7 +37,7 @@ module.exports = {
 						.setDescription(enCommands.activity.newActivity.selectPingRole)
 						.setDescriptionLocalizations({
 							ru: ruCommands.activity.newActivity.selectPingRole,
-							uk: ukCommands.activity.newActivity.selectPingRole,
+							uk: ukCommands.activity.newActivity.selectPingRole
 						})
 						.setRequired(true)
 				)
@@ -48,12 +48,13 @@ module.exports = {
 				.setDescription(enCommands.activity.searchActivity.description)
 				.setDescriptionLocalizations({
 					ru: ruCommands.activity.searchActivity.description,
-					uk: ukCommands.activity.searchActivity.description,
+					uk: ukCommands.activity.searchActivity.description
 				})
 		),
 	async execute(interaction) {
 		const { options, client, guild } = interaction;
 		const { id: guildId } = guild;
+
 		const subCommand = options.getSubcommand();
 		const locale = await getLocalizedText(interaction);
 		const roleId = options.getRole(enCommands.options.roleOption);
@@ -65,7 +66,8 @@ module.exports = {
 		switch (subCommand) {
 			case enCommands.subcommands.newActivity:
 				const modal = await createNewActivityModal(locale, roleId);
-				return await interaction.showModal(modal);
+				await interaction.showModal(modal);
+				break;
 
 			case enCommands.subcommands.searchActivity:
 				const activitySchema = client.models.get('activity');
@@ -80,25 +82,23 @@ module.exports = {
 							locale.commands.activity.searchActivity.noActivities,
 							{ warningEmoji: warning }
 						),
-						color: defaultBotColor,
+						color: defaultBotColor
 					};
 					return await interaction.reply({
 						embeds: [responseEmbed],
-						ephemeral: true,
+						ephemeral: true
 					});
 				}
 				responseEmbed = {
 					title: locale.commands.activity.searchActivity.title,
 					description: activityLinks.join('\n'),
-					color: linksColor,
+					color: linksColor
 				};
 
 				return await interaction.reply({
 					embeds: [responseEmbed],
-					ephemeral: true,
+					ephemeral: true
 				});
-			default:
-				return;
 		}
-	},
+	}
 };

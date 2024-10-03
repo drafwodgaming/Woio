@@ -19,7 +19,7 @@ module.exports = {
 		.setDMPermission(false),
 	async execute(interaction) {
 		const { guild } = interaction;
-		const { name, ownerId, createdTimestamp } = guild;
+		const { name, ownerId, createdTimestamp, description } = guild;
 		const { members, roles, channels, id: guildId } = guild;
 
 		const locale = await getLocalizedText(interaction);
@@ -73,12 +73,12 @@ module.exports = {
 			.join(' ');
 		const guildRolesCount = roles.cache.size;
 
-		const description =
-			guild.description || locale.commands.serverInfo.noDescription;
+		const guildDescription =
+			description || locale.commands.serverInfo.noDescription;
 
 		const serverInfoEmbed = {
 			color: defaultBotColor,
-			description: bold(description),
+			description: bold(guildDescription),
 			fields: [
 				{
 					name: locale.commands.serverInfo.generalLabel,
