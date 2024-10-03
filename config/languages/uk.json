@@ -1,21 +1,6 @@
 {
 	"code": "uk",
 	"commands": {
-		"activity": {
-			"description": "Управління активностями",
-			"newActivity": {
-				"description": "Створення нової активності",
-				"selectPingRole": "Оберіть роль"
-			},
-			"searchActivity": {
-				"description": "Пошук існуючих активностей на сервері",
-				"nameLabel": "Назва: {{name}}",
-				"descriptionLabel": "Опис: {{description}}",
-				"playersCountLabel": "Гравці: {{{playersInfo}}}",
-				"title": "Посилання на активності",
-				"noActivities": "{{{warningEmoji}}} **No activities found**"
-			}
-		},
 		"help": {
 			"title": "Меню команд",
 			"description": "Показати список команд бота"

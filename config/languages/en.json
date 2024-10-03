@@ -18,24 +18,6 @@
 			"searchActivity": "search"
 		},
 
-		"activity": {
-			"name": "activity",
-			"description": "Managing activities",
-			"newActivity": {
-				"description": "Creating a new activity",
-				"selectPingRole": "Select role"
-			},
-
-			"searchActivity": {
-				"description": "Searching for existing activities on the server",
-				"nameLabel": "Name: {{name}}",
-				"descriptionLabel": "Description: {{description}}",
-				"playersCountLabel": "Players: {{{playersInfo}}}",
-				"title": "Activity Links",
-				"noActivities": "{{{warningEmoji}}} **No activities found**"
-			}
-		},
-
 		"help": {
 			"name": "help",
 			"title": "Commands menu",

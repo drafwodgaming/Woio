@@ -1,21 +1,6 @@
 {
 	"code": "ru",
 	"commands": {
-		"activity": {
-			"description": "Управление активностями",
-			"newActivity": {
-				"description": "Создание новой активности",
-				"selectPingRole": "Выбери роль"
-			},
-			"searchActivity": {
-				"description": "Поиск существующих активностей на сервере",
-				"nameLabel": "Название: {{name}}",
-				"descriptionLabel": "Описание: {{description}}",
-				"playersCountLabel": "Игроки: {{{playersInfo}}}",
-				"title": "Активности",
-				"noActivities": "{{{warningEmoji}}} **Активности не найдены**"
-			}
-		},
 		"help": {
 			"title": "Меню команд",
 			"description": "Отобразить список команд бота"
