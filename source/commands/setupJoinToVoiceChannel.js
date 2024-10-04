@@ -68,45 +68,52 @@ module.exports = {
 
 		const channelOption = options.getChannel(enCommands.options.channelOption);
 
-		let description;
+		const responseEmbed = async (description, color) => ({
+			color,
+			description,
+		});
 
 		switch (subCommand) {
-			case enCommands.subcommands.setup:
+			case enCommands.subcommands.setup: {
 				const updateData = await joinToCreateSchema.findOneAndUpdate(
 					{ guildId },
 					{ $set: { channelId: channelOption.id } },
 					{ upsert: true }
 				);
 
-				description = updateData
+				const description = updateData
 					? mustache.render(locale.commands.joinToCreateChannel.editedChannel, {
 							channelId: channelOption.id,
 					  })
 					: mustache.render(
 							locale.commands.joinToCreateChannel.installedChannel,
-							{ channelId: channelOption.id }
+							{
+								channelId: channelOption.id,
+							}
 					  );
 
-				const enableResponseEmbed = {
-					color: updateData ? editBlueColor : installGreenColor,
+				const enableResponseEmbed = await responseEmbed(
 					description,
-				};
+					updateData ? editBlueColor : installGreenColor
+				);
 				return interaction.reply({ embeds: [enableResponseEmbed] });
-
-			case enCommands.subcommands.disable:
+			}
+			case enCommands.subcommands.disable: {
 				const deletedData = await joinToCreateSchema.findOneAndDelete({
 					guildId,
 				});
-				description = deletedData
+				const description = deletedData
 					? mustache.render(locale.commands.joinToCreateChannel.deletedChannel)
 					: mustache.render(locale.commands.joinToCreateChannel.noChannel, {
 							warningEmoji: warning,
 					  });
-				const disableResponseEmbed = {
-					color: deletedData ? errorRedColor : defaultBotColor,
+
+				const disableResponseEmbed = await responseEmbed(
 					description,
-				};
+					deletedData ? errorRedColor : defaultBotColor
+				);
 				return interaction.reply({ embeds: [disableResponseEmbed] });
+			}
 		}
 	},
 };

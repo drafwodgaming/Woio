@@ -17,6 +17,7 @@ module.exports = {
 			uk: ukCommands.serverInfo.description,
 		})
 		.setDMPermission(false),
+
 	async execute(interaction) {
 		const { guild } = interaction;
 		const { name, ownerId, createdTimestamp, description } = guild;
@@ -25,32 +26,25 @@ module.exports = {
 		const locale = await getLocalizedText(interaction);
 		const defaultBotColor = getColor('default');
 
+		// Получаем информацию о участниках
 		const guildMembersCount = members.cache.filter(
 			member => !member.user.bot
 		).size;
 		const botMembersCount = members.cache.size - guildMembersCount;
 		const totalMembersCount = members.cache.size;
 
-		const guildIcon = guild.iconURL();
-
-		const textChannelsIco = emojis.textChannel;
-		const voiceChannelsIco = emojis.voiceChannel;
-		const categoriesIco = emojis.category;
-		const annnouncementChannelIco = emojis.announcement;
-		const stageChannelIco = emojis.stage;
-		const forumIco = emojis.forum;
-
+		// Получаем информацию о каналах
 		const guildChannels = channels.cache.size;
 		const guildCategories = channels.cache.filter(
-			c => c.type === ChannelType.GuildCategory
+			channel => channel.type === ChannelType.GuildCategory
 		).size;
 		const textChannels = channels.cache.filter(
-			c => c.type === ChannelType.GuildText
+			channel => channel.type === ChannelType.GuildText
 		).size;
 		const voiceChannels = channels.cache.filter(
 			channel => channel.type === ChannelType.GuildVoice
 		).size;
-		const annnouncementChannel = guild.channels.cache.filter(
+		const announcementChannel = channels.cache.filter(
 			channel => channel.type === ChannelType.GuildAnnouncement
 		).size;
 		const stageChannel = channels.cache.filter(
@@ -60,6 +54,7 @@ module.exports = {
 			channel => channel.type === ChannelType.GuildForum
 		).size;
 
+		// Получаем информацию об эмодзи
 		const guildEmojis = guild.emojis.cache;
 		const totalEmojisCount = guildEmojis.size;
 		const animatedEmojisCount = guildEmojis.filter(
@@ -67,15 +62,19 @@ module.exports = {
 		).size;
 		const staticEmojisCount = totalEmojisCount - animatedEmojisCount;
 
+		// Получаем информацию о ролях
+		const maxRolesDisplay = 15;
 		const guildRoles = roles.cache
 			.map(role => role)
-			.slice(0, 15)
+			.slice(0, maxRolesDisplay)
 			.join(' ');
 		const guildRolesCount = roles.cache.size;
 
+		// Описание сервера
 		const guildDescription =
 			description || locale.commands.serverInfo.noDescription;
 
+		// Создаем embed для информации о сервере
 		const serverInfoEmbed = {
 			color: defaultBotColor,
 			description: bold(guildDescription),
@@ -83,9 +82,7 @@ module.exports = {
 				{
 					name: locale.commands.serverInfo.generalLabel,
 					value: [
-						mustache.render(locale.commands.serverInfo.ownerId, {
-							ownerId,
-						}),
+						mustache.render(locale.commands.serverInfo.ownerId, { ownerId }),
 						mustache.render(locale.commands.serverInfo.createdAt, {
 							guildCreatedAt: `<t:${parseInt(createdTimestamp / 1000)}:R>`,
 						}),
@@ -110,27 +107,30 @@ module.exports = {
 					}),
 					value: [
 						mustache.render(locale.commands.serverInfo.textChannelsCount, {
-							textChannelsIco,
+							textChannelsIco: emojis.textChannel,
 							textChannels,
 						}),
 						mustache.render(locale.commands.serverInfo.voiceChannelsCount, {
-							voiceChannelsIco,
+							voiceChannelsIco: emojis.voiceChannel,
 							voiceChannels,
 						}),
 						mustache.render(locale.commands.serverInfo.categoriesCount, {
-							categoriesIco,
+							categoriesIco: emojis.category,
 							guildCategories,
 						}),
 						mustache.render(
 							locale.commands.serverInfo.annnouncementChannelsCount,
-							{ annnouncementChannelIco, annnouncementChannel }
+							{
+								annnouncementChannelIco: emojis.announcement,
+								announcementChannel,
+							}
 						),
 						mustache.render(locale.commands.serverInfo.stageChannelsCount, {
-							stageChannelIco,
+							stageChannelIco: emojis.stage,
 							stageChannel,
 						}),
 						mustache.render(locale.commands.serverInfo.forumCount, {
-							forumIco,
+							forumIco: emojis.forum,
 							forum,
 						}),
 					].join(' | '),
@@ -155,12 +155,13 @@ module.exports = {
 					value: guildRoles,
 				},
 			],
-			thumbnail: { url: guildIcon },
-			author: { name: name, iconURL: guildIcon },
+			thumbnail: { url: guild.iconURL() },
+			author: { name: name, iconURL: guild.iconURL() },
 			footer: { text: guildId },
 			timestamp: new Date(),
 		};
 
+		// Отправляем embed в ответ на команду
 		await interaction.reply({ embeds: [serverInfoEmbed] });
 	},
 };

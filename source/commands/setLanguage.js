@@ -42,8 +42,10 @@ module.exports = {
 						)
 				)
 		),
+
 	async execute(interaction) {
 		const { guild, options, client } = interaction;
+
 		const selectedLocale = options.getString(enCommands.options.languageOption);
 
 		if (options.getSubcommand() === enCommands.subcommands.setLanguage) {

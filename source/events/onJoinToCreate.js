@@ -10,45 +10,45 @@ const mustache = require('mustache');
 module.exports = {
 	name: Events.VoiceStateUpdate,
 	async execute(oldState, newState) {
-		const { member } = oldState || newState;
-		const { guild, user, client } = member;
-		const { id: guildId } = guild;
-		const { username } = user;
+		if (!oldState.channelId && newState.channelId) {
+			const { member } = newState;
+			const { guild, user, client } = member;
+			const guildId = guild.id;
 
-		const [joinToCreateData, temporaryChannels] = await Promise.all([
-			client.models.get('joinToCreate').findOne({ guildId }),
-			client.models.get('temporaryChannels'),
-		]);
+			// Получаем данные о канале для создания
+			const joinToCreateData = await client.models
+				.get('joinToCreate')
+				.findOne({ guildId });
+			if (
+				!joinToCreateData ||
+				joinToCreateData.channelId !== newState.channelId
+			)
+				return;
 
-		if (!joinToCreateData) return;
-
-		const interactionChannelId = joinToCreateData.channelId;
-
-		if (interactionChannelId !== newState.channelId) return;
-
-		const parentCategory = newState.channel?.parent;
-		const locale = await getLocalizedText(member);
-		const channelName = mustache.render(
-			locale.events.joinToCreate.channelName,
-			{ username }
-		);
-
-		const existingChannel = await temporaryChannels.findOne({
-			guildId,
-			channelId: newState.channelId,
-		});
-
-		if (!existingChannel) {
-			const createdVoiceChannel = await createVoiceChannel(
-				member.guild,
-				member,
-				channelName,
-				0,
-				parentCategory
+			const parentCategory = newState.channel?.parent;
+			const locale = await getLocalizedText(member);
+			const channelName = mustache.render(
+				locale.events.joinToCreate.channelName,
+				{ username: user.username }
 			);
 
-			if (createdVoiceChannel) {
-				newState.setChannel(createdVoiceChannel);
+			const temporaryChannels = client.models.get('temporaryChannels');
+			const existingChannel = await temporaryChannels.findOne({
+				guildId,
+				channelId: newState.channelId,
+			});
+
+			if (!existingChannel) {
+				const createdVoiceChannel = await createVoiceChannel(
+					guild,
+					member,
+					channelName,
+					0,
+					parentCategory
+				);
+				if (!createdVoiceChannel) return;
+
+				await newState.setChannel(createdVoiceChannel);
 
 				const defaultBotColor = getColor('default');
 				const embedMessage = {

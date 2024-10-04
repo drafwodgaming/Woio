@@ -45,9 +45,10 @@ module.exports = {
 				.setRequired(true)
 		)
 		.setDMPermission(false),
+
 	async execute(interaction) {
-		const { options } = interaction;
 		const locale = await getLocalizedText(interaction);
+		const { options } = interaction;
 
 		const reportType = options.getString(enCommands.options.typeReportOption);
 		const description = options.getString(

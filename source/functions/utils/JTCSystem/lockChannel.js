@@ -2,12 +2,15 @@ const lockChannel = async (interaction, schema, locale) => {
 	await interaction.deferUpdate();
 
 	const { guild, user } = interaction;
-	const { id: guildId, roles: { everyone: everyoneRole } = {} } = guild;
+	const {
+		id: guildId,
+		roles: { everyone },
+	} = guild;
 	const { id: creatorId } = user;
 
 	const updatedChannel = await schema.findOneAndUpdate(
 		{ guildId, creatorId },
-		{ $set: { isLocked: true } },
+		{ $set: { lockStatus: 'locked' } },
 		{ upsert: true }
 	);
 
@@ -22,7 +25,7 @@ const lockChannel = async (interaction, schema, locale) => {
 		const voiceChannel = guild.channels.cache.get(channelId);
 
 		if (voiceChannel)
-			voiceChannel.permissionOverwrites.edit(everyoneRole, { Connect: false });
+			voiceChannel.permissionOverwrites.edit(everyone, { Connect: false });
 	}
 };
 
